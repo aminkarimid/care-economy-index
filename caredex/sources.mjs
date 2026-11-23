@@ -183,15 +183,88 @@ export function oewsNationalDetail({ rows, idx }, codes) {
 // ---------- OEWS state file (oesm25st.zip): aides employed and median wage by state ----------
 export async function oewsStates(stZip, occ = '31-1120') {
   const z = await unzip(stZip);
-  const name = z.names.find(k => /state.*\.xlsx$/i.test(k));
-  const b = await xlsxBook(await z.get(name));
-  const rows = await b.read();
-  const idx = Object.fromEntries(Object.entries(rows[0]).map(([k, v]) => [String(v).toUpperCase(), k]));
+  const { rows, idx } = await oewsStateRows(stZip, z);
   const out = {};
   rows.slice(1).filter(r => r[idx.OCC_CODE] === occ).forEach(r => {
     out[r[idx.PRIM_STATE]] = { aides: +r[idx.TOT_EMP], medianWage: +r[idx.H_MEDIAN] };
   });
   return out;
+}
+
+
+// ---------- OEWS state file rows. Skips Excel lock files (~$...) and folder entries in the zip. ----------
+export async function oewsStateRows(stZip, z) {
+  z = z || await unzip(stZip);
+  const name = z.names.find(k => /(^|\/)state_M20\d\d_dl\.xlsx$/i.test(k) && !k.includes('~$'));
+  if (!name) throw new Error('no state_M20YY_dl.xlsx in the zip');
+  const rows = await (await xlsxBook(await z.get(name))).read();
+  const idx = Object.fromEntries(Object.entries(rows[0]).map(([k, v]) => [String(v).toUpperCase(), k]));
+  return { rows, idx };
+}
+
+// ---------- Pay layer (payData.ts): competing jobs, minimum wage, price levels ----------
+export const COMPETING_SOC = ['35-2021', '35-3023', '37-2011', '41-2011', '53-7062', '53-7065'];
+// {ST: {soc: hourly median}} for the aide code and the six competing codes. Non-numeric cells throw.
+export async function oewsStateMedians(stZip, occs = ['31-1120', ...COMPETING_SOC]) {
+  const { rows, idx } = await oewsStateRows(stZip);
+  const st = idx.PRIM_STATE || idx.ST;
+  const out = {};
+  for (const r of rows.slice(1)) {
+    if (!occs.includes(r[idx.OCC_CODE])) continue;
+    const v = Number(r[idx.H_MEDIAN]);
+    if (!Number.isFinite(v)) throw new Error(`non-numeric median ${r[idx.H_MEDIAN]} for ${r[st]} ${r[idx.OCC_CODE]}`);
+    (out[r[st]] || (out[r[st]] = {}))[r[idx.OCC_CODE]] = v;
+  }
+  return out;
+}
+// DOL "Changes in Basic Minimum Wages" page: {state name: cell text} for one year column.
+export function dolMinWageColumn(html, year = '2024') {
+  const clean = (t) => t.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  for (const t of html.match(/<table[\s\S]*?<\/table>/gi) || []) {
+    const rows = (t.match(/<tr[\s\S]*?<\/tr>/gi) || []).map(r => (r.match(/<t[hd][\s\S]*?<\/t[hd]>/gi) || []).map(clean));
+    const head = rows.find(r => r.some(c => c.replace(/\s*\(.*\)$/, '') === year));
+    if (!head) continue;
+    const col = head.findIndex(c => c.replace(/\s*\(.*\)$/, '') === year);
+    const out = {};
+    for (const r of rows) if (r.length === head.length && r !== head && r[0]) out[r[0]] = r[col];
+    return out;
+  }
+  throw new Error(`no table with a ${year} column`);
+}
+// BEA SARPP zip: {fips2: {year: RPP all items}}
+export async function beaRpp(sarppZip) {
+  const z = await unzip(sarppZip);
+  const name = z.names.find(k => /^SARPP_STATE_2008_\d{4}\.csv$/i.test(k));
+  if (!name) throw new Error('SARPP_STATE csv not in zip');
+  const lines = new TextDecoder().decode(await z.get(name)).split(/\r?\n/).filter(Boolean);
+  const hdr = lines[0].split(',');
+  const parse = (l) => { const o = []; let c = '', q = false; for (const ch of l) { if (ch === '"') q = !q; else if (ch === ',' && !q) { o.push(c.trim()); c = ''; } else c += ch; } o.push(c.trim()); return o; };
+  const out = {};
+  for (const l of lines.slice(1)) {
+    const c = parse(l);
+    if (c[4] !== '1' || !/^\d{2}000$/.test(c[0]) || c[0] === '00000') continue;
+    out[c[0].slice(0, 2)] = Object.fromEntries(hdr.slice(8).map((y, i) => [y, Number(c[8 + i])]));
+  }
+  return out;
+}
+const r2 = (x) => Math.round((x + 1e-9) * 100) / 100;
+const med = (a) => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+// Rebuild PAY_RAW rows. states: [{code, name, fips}]; dol: dolMinWageColumn output; rpp: beaRpp output.
+export function buildPay(m25, m24, dol, rpp, states, rppYear = '2024') {
+  return [...states].sort((a, b) => (a.code < b.code ? -1 : 1)).map(({ code, name, fips }) => {
+    const a = m25[code], b = m24[code];
+    if (!a || !b) throw new Error(`OEWS state medians missing for ${code}`);
+    const comp = COMPETING_SOC.map(s => { if (a[s] === undefined) throw new Error(`${code} ${s} missing`); return a[s]; });
+    const cm = r2(med(comp));
+    const listed = dol[name];
+    if (listed === undefined) throw new Error(`DOL table has no row for ${name}`);
+    const m = listed.match(/^\$?(\d+\.\d+)(?:[([].*)?$/);
+    const mw = Math.max(m ? Number(m[1]) : 7.25, 7.25);
+    const rp = rpp[fips] && rpp[fips][rppYear];
+    if (!rp) throw new Error(`RPP ${rppYear} missing for ${fips}`);
+    const a25 = a['31-1120'], a24 = b['31-1120'];
+    return [code, a25, ...comp, cm, r2(a25 / med(comp)), a24, listed, mw, r2(a24 - mw), rp, r2(a25 / (rp / 100))];
+  });
 }
 
 // ---------- Census Vintage 2025 civilian population by single year of age (sc-est2025-agesex-civ.csv) ----------
@@ -270,9 +343,10 @@ export function siteLiterals({ states, national, indexRows }) {
 }
 
 // bundle: text of /assets/index-*.js; canon: {name: jsonString}. Returns the labels not found.
-export function siteChecks(bundle, { canon, states, national, indexRows }) {
+export function siteChecks(bundle, { canon, states, national, indexRows, pay = [] }) {
   const missing = Object.entries(canon).filter(([, json]) => !bundle.includes(json)).map(([name]) => `dataset ${name}`);
   for (const [label, lit] of siteLiterals({ states, national, indexRows })) if (!bundle.includes(lit)) missing.push(label);
+  for (const r of pay) if (!bundle.includes('[' + r.map(v => typeof v === 'string' ? JSON.stringify(v) : minNum(v)).join(',') + ']')) missing.push(`row ${r[0]} (${r.length === 16 ? "pay" : "index components"})`);
   return missing;
 }
 

@@ -33,6 +33,9 @@ const URLS = {
   cooperPage: 'https://www.coopercenter.org/national-population-projections',
   oewsNat: (yy) => `https://www.bls.gov/oes/special-requests/oesm${yy}nat.zip`,
   oewsSt: 'https://www.bls.gov/oes/special-requests/oesm25st.zip',
+  oewsSt24: 'https://www.bls.gov/oes/special-requests/oesm24st.zip',
+  dol: 'https://www.dol.gov/agencies/whd/state/minimum-wage/history',
+  bea: 'https://apps.bea.gov/regional/zip/SARPP.zip',
   cpi: 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS',
   kff: 'https://datawrapper.dwcdn.net/WNQfV/5/dataset.csv',
   census: 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2025/state/asrh/sc-est2025-agesex-civ.csv',
@@ -95,6 +98,16 @@ function compareObj(name, file, rebuilt, sourceUrl) {
   if (d.length === 0) ok.push(`${name} unchanged`); else changes.push({ name, source: sourceUrl, diff: d });
 }
 
+// Rows of src/data/indexComponents.ts, rebuilt from the thesis CSV (same column order as the site file).
+function readIndexComponents(path) {
+  const lines = readFileSync(path, 'utf8').trim().split(/\r?\n/);
+  const h = lines[0].split(',');
+  const cols = ['state_code', 'HPAS', 'GPI_c_rebal', 'GPI_c3', 'GPI_hpas_mult', 'MFI_MF2_wage', 'MFI_MF2_afford', 'MFI_MF2', 'MFI_MF1', 'MFI_bottleneck', 'Wage_Compression_Ratio', 'Training_Floor_Gap'];
+  const ix = cols.map(n => { const i = h.indexOf(n); if (i < 0) throw new Error(`column ${n} missing in ${path}`); return i; });
+  return lines.slice(1).map(l => l.split(',')).map(c => ix.map((i, k) => (k === 0 || k === 9 ? c[i] : Number(c[i]))))
+    .sort((a, b) => (a[0] < b[0] ? -1 : 1));
+}
+
 function readIndexCsv(path) {
   const lines = readFileSync(path, 'utf8').trim().split(/\r?\n/);
   const h = lines[0].split(',');
@@ -152,7 +165,8 @@ async function main() {
 
   // States and national figures
   const census = await step('Census civilian population', async () => S.censusCivPop(await get(URLS.census, 'text'), 2025));
-  const oewsSt = await step('OEWS May 2025 state file', async () => S.oewsStates(await get(URLS.oewsSt)));
+  const oewsStBuf = await step('OEWS May 2025 state file', () => get(URLS.oewsSt));
+  const oewsSt = oewsStBuf && await step('OEWS May 2025 state parse', () => S.oewsStates(oewsStBuf));
   const siteStates = JSON.parse(readExp('site_states.json'));
   const siteNational = JSON.parse(readExp('site_national.json'));
   if (census && oewsSt) {
@@ -166,6 +180,18 @@ async function main() {
     compareObj('National figures (OEWS May 2025, EP 2025-35, Census V2025)', 'site_national.json', rebuilt, `${URLS.oewsNat('25')} ; ${URLS.ep} ; ${URLS.census}`);
   }
 
+
+  // Pay layer (src/data/payData.ts): competing jobs (OEWS May 2025), aide median May 2024, DOL minimum wage 2024, BEA RPP 2024
+  const m25 = oewsStBuf && await step('OEWS May 2025 state medians', () => S.oewsStateMedians(oewsStBuf));
+  const m24 = await step('OEWS May 2024 state file', async () => S.oewsStateMedians(await get(URLS.oewsSt24), ['31-1120']));
+  const dolHtml = await step('DOL minimum wage history page', () => get(URLS.dol, 'text'));
+  const dol = dolHtml && await step('DOL 2024 column', () => S.dolMinWageColumn(dolHtml, '2024'));
+  const rpp = await step('BEA SARPP.zip', async () => S.beaRpp(await get(URLS.bea)));
+  if (m25 && m24 && dol && rpp) {
+    compareCanon('Pay layer (OEWS 2024-25, DOL, BEA RPP)', 'site_pay.json',
+      await step('build pay', () => JSON.stringify(S.buildPay(m25, m24, dol, rpp, siteStates))), `${URLS.oewsSt} ; ${URLS.oewsSt24} ; ${URLS.dol} ; ${URLS.bea}`);
+  }
+
   // Live site: does the deployed bundle still carry the snapshot values?
   let siteMissing;
   await step('caredex.vercel.app bundle', async () => {
@@ -174,10 +200,10 @@ async function main() {
     if (!js) throw new Error('no /assets/index-*.js in the page');
     const bundle = await get(new URL(js[0], SITE).href, 'text');
     const canon = Object.fromEntries(['a1_cms', 'a2_ep', 'a3_cooper', 'a4_oews', 'a4_cpi', 'a5_kff'].map(n => [n, readExp(`${n}.json`)]));
-    siteMissing = S.siteChecks(bundle, { canon, states: siteStates, national: siteNational, indexRows: readIndexCsv(INDEX_CSV) });
+    siteMissing = S.siteChecks(bundle, { canon, states: siteStates, national: siteNational, indexRows: readIndexCsv(INDEX_CSV), pay: [...JSON.parse(readExp('site_pay.json')), ...readIndexComponents(INDEX_CSV)] });
     notes.push(`Site bundle checked: ${new URL(js[0], SITE).href}`);
   });
-  if (siteMissing && siteMissing.length === 0) ok.push('Live site carries every snapshot value (6 datasets, 51 states, national figures, 51 index rows)');
+  if (siteMissing && siteMissing.length === 0) ok.push('Live site carries every snapshot value (6 datasets, 51 states, national figures, 51 index rows, 51 pay rows, 51 index-component rows)');
   if (siteMissing && siteMissing.length) changes.push({ name: 'Live site differs from the snapshots', source: SITE, diff: siteMissing.map(m => `not found in bundle: ${m}`) });
 
   // Newer releases
@@ -186,6 +212,8 @@ async function main() {
     const st = await probe(url);
     if (st === 200) releases.push(`${label} is available: ${url}`);
   }
+  if (dolHtml) { try { S.dolMinWageColumn(dolHtml, '2025'); releases.push(`DOL minimum wage table now has a 2025 column: ${URLS.dol}`); } catch { /* not yet */ } }
+  if (rpp && Object.values(rpp)[0] && Object.values(rpp)[0]['2025'] !== undefined) releases.push(`BEA RPP now covers 2025: ${URLS.bea}`);
   if (ep && ep.header !== siteNational.projections.header) releases.push(`BLS Employment Projections now has a new period: "${ep.header}"`);
 
   // Report
