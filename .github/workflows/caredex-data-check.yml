@@ -1,0 +1,67 @@
+name: CareDex data check
+
+# Monthly: re-fetch every primary source behind caredex.vercel.app, rebuild the values,
+# compare them with caredex/expected/, and check the live site. Opens or updates an issue
+# labelled "caredex-data" when anything changed or a newer release is out.
+on:
+  schedule:
+    - cron: '17 14 3 * *'   # 14:17 UTC on the 3rd of each month
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: caredex-data-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Rebuild values from the sources and compare
+        id: check
+        run: node caredex/check.mjs
+        continue-on-error: true
+
+      - name: Keep the rebuilt values and the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: caredex-out
+          path: caredex/out/
+          retention-days: 90
+
+      - name: Open or update the issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          [ -f caredex/out/status.json ] || { echo "No report written"; exit 0; }
+          changes=$(node -p "require('./caredex/out/status.json').changes")
+          releases=$(node -p "require('./caredex/out/status.json').releases")
+          errors=$(node -p "require('./caredex/out/status.json').errors")
+          if [ "$changes" = "0" ] && [ "$releases" = "0" ] && [ "$errors" = "0" ]; then
+            echo "Nothing changed."; exit 0
+          fi
+          { cat caredex/out/report.md; echo; echo "Run: $RUN_URL"; } > body.md
+          gh label create caredex-data --color 1f6feb --description "CareDex monthly data check" --force
+          open=$(gh issue list --label caredex-data --state open --json number --jq '.[0].number')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body-file body.md
+          else
+            gh issue create --title "CareDex data check: $(date -u +%Y-%m-%d)" --label caredex-data --body-file body.md
+          fi
+
+      - name: Fail the run if a source could not be read
+        if: steps.check.outcome == 'failure'
+        run: exit 1

@@ -1,0 +1,91 @@
+{
+ "occupations": [
+  {
+   "soc": "31-1120",
+   "employment": 4305810,
+   "p10": 13.0,
+   "median": 17.21,
+   "p90": 21.65
+  },
+  {
+   "soc": "31-1131",
+   "employment": 1448910,
+   "p10": 16.32,
+   "median": 20.32,
+   "p90": 24.99
+  },
+  {
+   "soc": "35-2021",
+   "employment": 893600,
+   "p10": 12.41,
+   "median": 16.98,
+   "p90": 21.8
+  },
+  {
+   "soc": "35-3023",
+   "employment": 3854050,
+   "p10": 10.98,
+   "median": 15.0,
+   "p90": 20.51
+  },
+  {
+   "soc": "37-2011",
+   "employment": 2209760,
+   "p10": 13.77,
+   "median": 17.71,
+   "p90": 24.17
+  },
+  {
+   "soc": "41-2011",
+   "employment": 3089410,
+   "p10": 11.79,
+   "median": 15.81,
+   "p90": 19.43
+  },
+  {
+   "soc": "43-4051",
+   "employment": 2595750,
+   "p10": 15.27,
+   "median": 21.53,
+   "p90": 30.57
+  },
+  {
+   "soc": "53-7062",
+   "employment": 2950280,
+   "p10": 15.03,
+   "median": 19.35,
+   "p90": 26.51
+  },
+  {
+   "soc": "53-7065",
+   "employment": 2833810,
+   "p10": 14.48,
+   "median": 17.95,
+   "p90": 23.68
+  },
+  {
+   "soc": "00-0000",
+   "employment": 155495730,
+   "p10": 15.0,
+   "median": 24.51,
+   "p90": 61.81
+  }
+ ],
+ "aides": {
+  "mean": 17.36,
+  "annualMedian": 35800
+ },
+ "projections": {
+  "emp2025": 4677100,
+  "emp2035": 5524400,
+  "change": 847300,
+  "pct": 18,
+  "openings": 760500,
+  "header": "Employment, 2025 | Employment, 2035 | Employment change, numeric, 2025–35 | Employment change, percent, 2025–35 | Occupational openings, 2025–35 annual average"
+ },
+ "population": {
+  "pop65": 61179918,
+  "total": 339058370,
+  "share65": 18.0
+ }
+}

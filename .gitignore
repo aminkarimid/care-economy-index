@@ -40,3 +40,4 @@ data/*
 !data/.gitkeep
 outputs/*
 !outputs/.gitkeep
+caredex/out/

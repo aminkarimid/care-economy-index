@@ -19,6 +19,7 @@ The method is in Section 4, Section 7 and Appendix III of the thesis. GPI, MFI a
 | `SYPA_Complete_Pipeline.py` | The code behind the thesis (22 March 2026): GPI v4 (geometric mean of HCBS rebalancing and ADRC access, times a program-authority multiplier), MFI v5 (0.60 × MF2 + 0.40 × MF1, Mazziotta-Pareto), PRI v6 (√(F × O) with a bilateral 60th-percentile gate and an EVV gate). |
 | `sypa_engine.py` | An earlier engine (PRI v3.2, January 2026). Kept for reference; it does not produce the thesis numbers. Its documentation is in `docs/LEGACY_sypa_engine.md`. |
 | `results/offline_rerun_2026-11-23/` | Outputs of a rerun of the thesis code without network access (see below). |
+| `caredex/` and `.github/workflows/caredex-data-check.yml` | A monthly check of the data on [caredex.vercel.app](https://caredex.vercel.app): it re-reads each primary source, rebuilds the figures and opens an issue when a value changes or a newer release appears. See `caredex/README.md`. |
 
 ## Running the thesis pipeline
 
