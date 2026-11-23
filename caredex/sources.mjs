@@ -429,3 +429,33 @@ export function diffPaths(a, b, path = '', out = [], max = 25) {
   for (const k of keys) diffPaths(a[k], b[k], path ? `${path}.${k}` : k, out, max);
   return out;
 }
+
+// W2 (src/data/ratesData.ts): KFF Medicaid HCBS Survey 2026, Appendix Table 4 (datawrapper 5M0i2), tab-separated.
+const KFF_STATE_CODES = { 'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'District of Columbia': 'DC', 'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD', 'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC', 'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY' };
+export function kffRates(tsv) {
+  const cell = (s) => {
+    s = s.trim();
+    if (!s.startsWith('$')) return [null, s];
+    return [Number(s.replace(/[$*,]/g, '')), s.endsWith('*') ? 'not hourly' : ''];
+  };
+  const out = {};
+  for (const line of tsv.split(/\r?\n/)) {
+    const r = line.split('\t');
+    if (r.length < 6 || r[0] === 'State' || r[0] === 'Median') continue;
+    const code = KFF_STATE_CODES[r[0].replace(/\*+$/, '')];
+    if (!code) throw new Error(`KFF rates: unknown state "${r[0]}"`);
+    out[code] = { agency: cell(r[1]), provider: cell(r[2]), hha: cell(r[5]) };
+  }
+  return out;
+}
+// Rows in RATES_RAW order: code, agencyRate, agencyFlag, providerRate, providerFlag, hhaRate, hhaFlag, aideWage2025, wageShare.
+// pay = rows of site_pay.json (index 1 = aideMedian2025).
+export function buildRates(kff, pay) {
+  return pay.map(p => p[0]).sort().map(code => {
+    const k = kff[code];
+    if (!k) throw new Error(`KFF rates: no row for ${code}`);
+    const w = pay.find(p => p[0] === code)[1];
+    const share = (k.agency[0] && k.agency[1] === '' && w) ? Math.round(w / k.agency[0] * 1000) / 1000 : null;
+    return [code, k.agency[0], k.agency[1], k.provider[0], k.provider[1], k.hha[0], k.hha[1], w, share];
+  });
+}

@@ -42,6 +42,7 @@ const URLS = {
   qwiRelease: 'R2026Q4',
   cpi: 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS',
   kff: 'https://datawrapper.dwcdn.net/WNQfV/5/dataset.csv',
+  kffRates: 'https://datawrapper.dwcdn.net/5M0i2/4/dataset.csv',
   census: 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2025/state/asrh/sc-est2025-agesex-civ.csv',
   // Newer releases. A 200 here means the site could move to newer data.
   probes: {
@@ -49,6 +50,7 @@ const URLS = {
     'OEWS May 2026 state file': 'https://www.bls.gov/oes/special-requests/oesm26st.zip',
     'Census Vintage 2026 civilian population by age': 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2026/state/asrh/sc-est2026-agesex-civ.csv',
     'KFF chart WNQfV version 6': 'https://datawrapper.dwcdn.net/WNQfV/6/dataset.csv',
+    'KFF HCBS rates table 5M0i2 version 5': 'https://datawrapper.dwcdn.net/5M0i2/5/dataset.csv',
     'ACS 2026 1-year table-based summary file': 'https://www2.census.gov/programs-surveys/acs/summary_file/2026/table-based-SF/data/1YRData/acsdt1y2026-b18107.dat',
   },
 };
@@ -203,6 +205,11 @@ async function main() {
     await step('build need', () => JSON.stringify(S.buildNeed(acs, JSON.parse(readExp('kff_waiting_2026.json')), siteStates))), `${URLS.acs('b18107')} ; ${URLS.acs('b18106')}`);
   notes.push('KFF waiting lists (2026 survey) are checked by hand: https://www.kff.org/medicaid/state-indicator/number-of-people-waiting-for-hcbs-by-target-population-and-whether-states-screen-for-eligibility/');
 
+  // Medicaid rates layer (src/data/ratesData.ts, RATES_RAW): KFF Medicaid HCBS Survey 2026 Appendix Table 4 joined with the aide median in site_pay.json.
+  compareCanon('Medicaid rates (KFF 2026 Appendix Table 4)', 'site_rates.json',
+    await step('build rates', async () => JSON.stringify(S.buildRates(S.kffRates(await get(URLS.kffRates, 'text')), JSON.parse(readExp('site_pay.json'))))), URLS.kffRates);
+  notes.push('State payment rate disclosures (DISCLOSURE_CHECK in ratesData.ts, 8 states) are checked by hand against the files linked on the Financing page.');
+
   // Turnover layer (src/data/qwiData.ts): QWI. A release probe always; the full rebuild (about 900 MB of downloads) only with CAREDEX_QWI=1.
   const qwiVer = await step('QWI release (MA version file)', () => get(URLS.qwi('ma', 'version_qwi.txt'), 'text'));
   if (qwiVer && !qwiVer.includes(URLS.qwiRelease)) releases.push(`QWI has a release newer than ${URLS.qwiRelease}: ${qwiVer.trim().split(/\r?\n/)[0]}`);
@@ -230,7 +237,7 @@ async function main() {
     if (!js) throw new Error('no /assets/index-*.js in the page');
     const bundle = await get(new URL(js[0], SITE).href, 'text');
     const canon = Object.fromEntries(['a1_cms', 'a2_ep', 'a3_cooper', 'a4_oews', 'a4_cpi', 'a5_kff'].map(n => [n, readExp(`${n}.json`)]));
-    siteMissing = S.siteChecks(bundle, { canon, states: siteStates, national: siteNational, indexRows: readIndexCsv(INDEX_CSV), pay: [...JSON.parse(readExp('site_pay.json')), ...readIndexComponents(INDEX_CSV), ...JSON.parse(readExp('site_need.json')), ...JSON.parse(readExp('site_qwi.json')).out, ...JSON.parse(readExp('site_qwi.json')).tr] });
+    siteMissing = S.siteChecks(bundle, { canon, states: siteStates, national: siteNational, indexRows: readIndexCsv(INDEX_CSV), pay: [...JSON.parse(readExp('site_pay.json')), ...readIndexComponents(INDEX_CSV), ...JSON.parse(readExp('site_need.json')), ...JSON.parse(readExp('site_qwi.json')).out, ...JSON.parse(readExp('site_qwi.json')).tr, ...JSON.parse(readExp('site_rates.json'))] });
     notes.push(`Site bundle checked: ${new URL(js[0], SITE).href}`);
   });
   if (siteMissing && siteMissing.length === 0) ok.push('Live site carries every snapshot value (6 datasets, 51 states, national figures, 51 index rows, 51 pay rows, 51 index-component rows, 51 need rows, 51 turnover rows, 26 turnover-trend rows)');

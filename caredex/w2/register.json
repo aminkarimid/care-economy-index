@@ -1,0 +1,305 @@
+{
+ "RI": {
+  "url": "https://eohhs.ri.gov/sites/g/files/xkgbur226/files/2026-07/HCBS%20Payment%20Rate%20Disclosure.pdf",
+  "sha256": "1c012a35a34956ad3d459d879e65bb901ccfa1aaac021d8f735d3fddbd793719",
+  "title": "Medicaid Access Rule: Fee-for-Service HCBS Payment Rate Disclosure \u2013 2026 Report",
+  "basis": "Average hourly payments from FFS claims, dates of service 10/1/24 to 6/30/25; 1115 waiver",
+  "page": "p.2",
+  "pc_rows": [
+   [
+    44.1,
+    491964,
+    "Personal Care | Agency | Non-DD"
+   ],
+   [
+    45.27,
+    10179,
+    "Personal Care | Agency | DD"
+   ]
+  ],
+  "hha_rows": null,
+  "notes": "Home health aide not listed (not delivered as a waiver service). Individual-provider personal care ($20.94) and Personal Care in the Workplace (agency and individual) excluded.",
+  "pc": 44.12,
+  "pc_claims": 502143
+ },
+ "PA": {
+  "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/documents/cy-2025-ffs-hcbs-20260625.pdf",
+  "sha256": "d56d5bed2c8a7d5b6d85bcd9d7b8d39197d5c38d19240bd4f342669347983bbe",
+  "title": "Calendar Year 2025 Medicaid Fee-For-Service Payment Rate Disclosure Report as Required by 42 CFR \u00a7447.203(b)",
+  "basis": "Base fee schedule rates, claims-weighted by procedure code, CY 2025 FFS claims",
+  "page": "p.2",
+  "pc_rows": [
+   [
+    30.59,
+    45974,
+    "Region 1 non-facility"
+   ],
+   [
+    31.87,
+    107671,
+    "Region 2 non-facility"
+   ],
+   [
+    30.24,
+    70433,
+    "Region 3 non-facility"
+   ],
+   [
+    29.98,
+    164886,
+    "Region 4 non-facility"
+   ]
+  ],
+  "hha_rows": [
+   [
+    58.41,
+    4278,
+    "Region 1"
+   ],
+   [
+    63.25,
+    14910,
+    "Region 2"
+   ],
+   [
+    63.19,
+    13441,
+    "Region 3"
+   ],
+   [
+    60.34,
+    11403,
+    "Region 4"
+   ]
+  ],
+  "notes": "PA fee schedules do not differ by agency vs individual provider (note 5). Most PA HCBS for older adults runs through managed care (Community HealthChoices), so FFS claims are a small share.",
+  "pc": 30.62,
+  "pc_claims": 388964,
+  "hha": 62.01,
+  "hha_claims": 44032
+ },
+ "KY": {
+  "url": "https://www.chfs.ky.gov/agencies/dms/DMSFeeRateSchedules/1915c%20HCBS%20LTSS%20RISE%20Services%20Summary.pdf",
+  "sha256": "688f3ff5e3a5ccc9bb492f7b2ac6ca7d00b56b7cd6e8c74e851331c9afe28c53",
+  "title": "1915(c) HCBS LTSS RISE Services Summary (Last-Modified 30 Jun 2026)",
+  "basis": "Rates effective 01/01/2025, CY 2025 services; single statewide rate for all populations, provider types and locations",
+  "page": "p.1",
+  "pc_rows": [
+   [
+    30.4,
+    4316251,
+    "Personal Care"
+   ]
+  ],
+  "hha_rows": [
+   [
+    68.94,
+    43437,
+    "Home Health Aide"
+   ]
+  ],
+  "notes": "KY's Personal Care category includes attendant care, personal assistance and respite codes. Its Home Health Aide category includes nursing codes billed by LPNs, RNs and RTs (p.2-3), so it is not an aide-only rate; excluded from the aide comparison.",
+  "pc": 30.4,
+  "pc_claims": 4316251,
+  "hha": 68.94,
+  "hha_claims": 43437,
+  "hha_use": false
+ },
+ "MD": {
+  "url": "https://health.maryland.gov/mmcp/longtermcare/Documents/Payment-Rate-Transparency-Comparative-Rate-Analysis-HCBS.pdf",
+  "sha256": "76fc10f272c3938483ebc778accb80bbfebb758d1153035d0967020f10765b4e",
+  "title": "Maryland HCBS Comparative Rate Analysis - 6.11.2026",
+  "basis": "Standard rate in effect 7/1/25, hourly average as disclosed; claims CY25",
+  "page": "p.1",
+  "pc_rows": [
+   [
+    25.58,
+    3031968,
+    "W5519 Personal Assistance Services, CFC, agency"
+   ],
+   [
+    17.04,
+    28155,
+    "W5521 PAS shared attendant, CFC"
+   ],
+   [
+    93.06,
+    35109,
+    "W5526 PAS (On-going), CPAS"
+   ],
+   [
+    25.58,
+    98066,
+    "W5527 PAS, CPAS"
+   ],
+   [
+    17.04,
+    1569,
+    "W5528 PAS shared attendant, CPAS"
+   ]
+  ],
+  "hha_rows": null,
+  "notes": "Daily personal assistance codes (W5532, W5533) have no hourly average and are excluded. Home health aide (0571) is paid per visit by county ($70.09 to $93.96) with no hourly average, so no hourly HHA rate. Homemaker: none in MD programs (legend note 4). The W5526 \"On-going\" code ($93.06/hr) is included under the rule; without it the average is $25.50.",
+  "pc": 26.24,
+  "pc_claims": 3194867
+ },
+ "IL": {
+  "url": "https://hfs.illinois.gov/content/dam/soi/en/web/hfs/medicalclients/hcbs/cy25hcbspaymentds.pdf",
+  "sha256": "ff90626d55e21d7578c2a5722143836782b82a4ac89be321081caf6e3aa08ee4",
+  "title": "Calendar Year 2025 HCBS Payment Disclosure Services Report (HFS)",
+  "basis": "Rate in effect 7/1/2025; claims 1/1/2025-12/31/2025",
+  "page": "pp.1-2",
+  "pc_rows": [
+   [
+    18.75,
+    23756,
+    "DRS Personal Assistant S5125 (waiver section 1)"
+   ],
+   [
+    18.75,
+    197813,
+    "DRS Personal Assistant S5125, Persons with Disabilities Waiver"
+   ],
+   [
+    18.75,
+    4973,
+    "DRS Personal Assistant S5125 (waiver section 3)"
+   ]
+  ],
+  "hha_rows": [
+   [
+    32.1,
+    3803,
+    "DSCC MFTD Certified Nursing Assistant T1004"
+   ],
+   [
+    25.0,
+    367,
+    "HH Agency Aide (CNA) T1004"
+   ],
+   [
+    25.0,
+    2078,
+    "HH Agency Aide (CNA) T1004, PwD"
+   ],
+   [
+    25.0,
+    2,
+    "HH Agency Aide (CNA) T1004"
+   ]
+  ],
+  "pc_provider": "not stated",
+  "notes": "The disclosure does not label personal assistant rows as agency or individual. Non-agency CNA rows (G0156, $21.75) excluded from home health aide. The largest program, Department on Aging In-Home Service (S5130, $29.63/hr, 10,988,213 claims), is classified by Illinois as Homemaker, not personal care.",
+  "pc": 18.75,
+  "pc_claims": 226542,
+  "hha": 29.32,
+  "hha_claims": 6250
+ },
+ "NC": {
+  "url": "https://medicaid.ncdhhs.gov/cy2025-hcbs-payment-rate-disclosure-analysis/open",
+  "sha256": "3961b575f87d9e46726ec64241067634cc86fa742a0df27a98c787646ccbea92",
+  "title": "Calendar Year 2025 North Carolina HCBS Claims by Fee Schedule and Service Categories",
+  "basis": "Fee schedule rates as of 7/1/2025; FFS paid claims for service dates CY2025 (runout to 1/31/2026)",
+  "page": "p.1",
+  "weight": "hour-equivalent units (NC reports units and beneficiaries, not claim counts)",
+  "pc_rows": [
+   [
+    27.46,
+    2804363,
+    "CAP C In-Home Aide Services, Both"
+   ],
+   [
+    23.85,
+    15883128,
+    "CAP Consumer-Directed In-Home Aide Services, Both"
+   ],
+   [
+    23.85,
+    13513759,
+    "CAP DA In-Home Aide Services, Both"
+   ],
+   [
+    23.84,
+    22711854,
+    "State plan Personal Care Service, Provider Agencies"
+   ]
+  ],
+  "hha_rows": [
+   [
+    37.55,
+    48669,
+    "Home Health Aide, Provider Agencies"
+   ]
+  ],
+  "notes": "NC files respite, adult day health and coordinated caregiving under Personal Care Service; excluded as not in-home aide hours (coordinated caregiving and ADH are per-diem illustrations at $5-7/hr). CAP Consumer-Directed rows are labelled Both; included under the rule. CAP CD and CAP DA may overlap (identical respite and ADH rows appear in both); same rate, so the weighted mean is barely affected. Agency-only state plan row alone: $23.84.",
+  "pc": 24.03,
+  "pc_claims": 54913104,
+  "hha": 37.55,
+  "hha_claims": 48669
+ },
+ "TX": {
+  "url": "https://pfd.hhs.texas.gov/sites/default/files/documents/acute-care/2026/7-1-2026-medicaid-reimbursement-rate-transparency-report.pdf",
+  "sha256": "4e1b024207d44f52cde5e00af0740af1326d9892c55f3d6b3aa1c077a7be3ffa",
+  "title": "Medicaid Reimbursement Payment Rate Transparency Reports (CMS-2442-F), Texas HHSC, July 2026",
+  "basis": "Rates as of 7/1/2025; paid claims (ICN count) and beneficiaries SFY2025 (9/1/2024-8/31/2025)",
+  "page": "p.11 (PDF p.14), Table 3",
+  "pc_rows": [
+   [
+    29.24,
+    63018613,
+    "Personal Care Services, non-facility, Adult and Child, Statewide"
+   ]
+  ],
+  "hha_rows": [
+   [
+    18.44,
+    11,
+    "Home Health Aide, Statewide"
+   ]
+  ],
+  "pc_use": false,
+  "hha_use": false,
+  "notes": "Texas reports one row per category, computed as a simple (unweighted) mean of 168 hourly rates across 10 programs (CAS, PHC, PCS and 1915(c)/(i) waivers), so the figure is not a claims-weighted rate and is not comparable with the other states. Non-facility includes services with residential components (note 3). Facility PCS: $29.52. Self-directed rates excluded. PCS/HAB category ($16.56, 4.4M claims) not used. HHA has 11 claims; not used.",
+  "pc": 29.24,
+  "pc_claims": 63018613,
+  "hha": 18.44,
+  "hha_claims": 11
+ },
+ "CA": {
+  "url": "https://www.dhcs.ca.gov/wp-content/uploads/2026/06/HCBS-Payment-Rate-Disclosure-Publication-July-2026.01.xlsx",
+  "sha256": "f901bfa3169c32d8ace6249c32e839567f3b5e75601401af16ea9f10736bd167",
+  "title": "DHCS Home and Community Based Services Rate Table (HCBS Payment Rate Disclosure July 2026)",
+  "basis": "Hourly Medi-Cal rate; paid claims and beneficiaries CY2025",
+  "page": "sheet HCBS Rate Table",
+  "pc_rows": [
+   [
+    21.12,
+    2602,
+    "T1019 Personal Care Agency (66)"
+   ],
+   [
+    21.12,
+    37150,
+    "T1019 HHA (14) provider"
+   ]
+  ],
+  "hha_rows": [
+   [
+    31.19,
+    1798,
+    "S9122 TT, HHA (14), 21+"
+   ],
+   [
+    28.35,
+    49060,
+    "S9122, HHA (14), 21+"
+   ]
+  ],
+  "partial": true,
+  "notes": "DHCS file covers the HCBA and related waivers only. California has two further disclosures not yet entered: CDSS (IHSS, which is mostly individual providers and so mostly excluded under the rule) and DDS (by regional center). G9012 case management rows filed under the PC and HHA categories are excluded (not aide hours). T2031 assisted living per diem rows have 0 claims. Rows with 0 claims carry no weight.",
+  "pc": 21.12,
+  "pc_claims": 39752,
+  "hha": 28.45,
+  "hha_claims": 50858
+ }
+}
