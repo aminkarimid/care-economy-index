@@ -49,9 +49,10 @@ A rerun on 23 November 2026 without network access, using the local fallbacks, g
 | Maine GPI, MFI | 0.76, 98.57 | 0.76, 99 |
 | Spearman ρ, GPI vs MFI | 0.248 | 0.248 |
 | Partial ρ (RPP, unemployment, region) | −0.076 | −0.116 |
-| PRI eligible states | AZ, HI, WI, MN, OH, MA, OR, NH, PA, OK, WA, GA | AZ, HI, MA, CO, MN, OH, OR, NH, GA, NV, WA, WI |
 
-GPI, MFI and the quadrants reproduce. The PRI list does not, for a reason visible in the code. Without the Census fetch, the fallback has no broadband data for households aged 65 and over, so digital readiness is set to 0.635 for every state. That input carries 0.35 of the Feasibility weight, and a constant adds no information, so Feasibility is decided by the EVV, program-authority and GPI terms alone. The partial correlation differs because the RPP and unemployment controls also came from fallbacks (BEA 2023 file, `macro.xlsx`). A second rerun on 23 November 2026, with live Census ACS 2023 data and the thesis workbook's cost figures, reproduced GPI, MFI and the quadrants exactly and gave digital readiness real variation across states, but still did not reproduce the thesis PRI list exactly: the digital-readiness inputs used for the thesis run are not in the project files.
+GPI, MFI and the quadrants reproduce. The partial correlation differs because the RPP and unemployment controls came from fallbacks (BEA 2023 file, `macro.xlsx`). A second rerun on 23 November 2026, with live Census ACS 2023 data and the thesis workbook's cost figures, reproduced GPI, MFI and the quadrants exactly.
+
+PRI results (state scores and the list of eligible states) are not published in this repository. The code that computes the PRI is included; running it writes `SYPA_PRI_v5.csv` to `outputs/`, and the `PRI_*` columns are removed from the published `SYPA_Full_v5.csv`.
 
 One label in the quality checks was corrected on 23 November 2026. The check printed as "MFI Spearman vs PHI > 0.80" has always tested the legacy MFI_v4 (ρ ≈ 0.91), not the headline MFI_v5 (ρ = 0.48, the figure reported in Appendix III.B). It now reads "MFI_v4 (legacy) Spearman vs PHI Rank Overall > 0.80" and the MFI_v5 value is printed alongside it. No calculation changed. The thesis version of the file had SHA-256 e1f5a1718d06ea77210b43d835b5fbe0fead78d1ef9d106668f3a4f9e8efd989.
 

@@ -98,19 +98,7 @@ Market Failure        9
   North Carolina         GPI=r2   MFI=r6   TrainGap | Double Bind
   Iowa                   GPI=r31  MFI=r22  CostBurden | Market Failure
 
-[INFO] === PRI ELIGIBLE STATES (BAP weighted, ranked) ===
-  #1   Arizona                High Performance     score=0.890
-  #2   Hawaii                 High Performance     score=0.872
-  #3   Wisconsin              High Performance     score=0.863
-  #4   Minnesota              High Performance     score=0.824
-  #5   Ohio                   Market Failure       score=0.808
-  #6   Massachusetts          High Performance     score=0.803
-  #7   Oregon                 High Performance     score=0.794
-  #8   New Hampshire          Market Failure       score=0.772
-  #9   Pennsylvania           Market Failure       score=0.756
-  #10  Oklahoma               Market Failure       score=0.754
-  #11  Washington             High Performance     score=0.743
-  #12  Georgia                Market Failure       score=0.682
+[23 Nov 2026: the ranked list of PRI-eligible states is removed from the public copy of this log]
 
 [INFO] === VALIDATION REPORT (8 checks) ===
                     Index                External  Spearman ρ  ✓                                                              Description
