@@ -334,6 +334,98 @@ export function buildQwi(byState, order, trendExclude = ['ak', 'mi'], trendTo = 
   return { out, tr };
 }
 
+// Annual stable-job turnover by state (W5): the mean of the four quarterly TurnOvrS values of each calendar year,
+// for 6216, 6241 and all industries, using only cells with clean flags (1, 6, 10). A year with any quarter missing or flagged is null.
+// Returns [[ST, [[year, t6216, t6241, t00], ...]], ...] in `order`, values to 3 dp.
+export function qwiAnnual(byState, order, from = 2019, to = 2024) {
+  return order.map(st => {
+    const by = {}; for (const r of byState[st] || []) (by[r[0] + 'Q' + r[1]] = by[r[0] + 'Q' + r[1]] || {})[r[2]] = r;
+    const yr = (y, i) => { const v = [1, 2, 3, 4].map(q => by[y + 'Q' + q] && by[y + 'Q' + q][i]).filter(r => r && r[6] !== '' && QOK(r[7])).map(r => +r[6]); return v.length === 4 ? r3(v.reduce((a, b) => a + b, 0) / 4) : null; };
+    const ys = []; for (let y = from; y <= to; y++) ys.push([y, yr(y, '6216'), yr(y, '6241'), yr(y, '00')]);
+    return [st.toUpperCase(), ys];
+  });
+}
+
+// ---------- State trends (W5): OEWS state files May 2019 to May 2025, aides [employment, hourly median] ----------
+// rows/idx: output of oewsStateRows for one year's oesmYYst.zip. states: [{code, fips}]. Files before 2020 lack PRIM_STATE, so AREA (state FIPS) is mapped to the postal code.
+export function oewsStateYear({ rows, idx }, states, occ = '31-1120') {
+  const byFips = Object.fromEntries(states.map(s => [s.fips, s.code]));
+  const out = {};
+  rows.slice(1).filter(r => String(r[idx.OCC_CODE]) === occ).forEach(r => {
+    const code = idx.PRIM_STATE !== undefined && r[idx.PRIM_STATE] ? r[idx.PRIM_STATE] : byFips[String(r[idx.AREA]).padStart(2, '0')];
+    if (code && states.some(s => s.code === code)) out[code] = [+r[idx.TOT_EMP], +r[idx.H_MEDIAN]];
+  });
+  return out;
+}
+// series: {year: {code: [emp, median]}} (2019..2025); cpi: {year: CPI-U May} (cpiMay output); qwiAnn: qwiAnnual output.
+// Row per state, in states order: [code, [[year, employment, median, median in May-2025 dollars, TurnOvrS 6216, 6241, all], ...]].
+// Real median = median x CPI(May 2025) / CPI(May year), 2 dp. QWI values are calendar-year means (null for 2025 and for unclean years).
+export function buildTrends(series, cpi, qwiAnn, states, from = 2019, to = 2025) {
+  const q = Object.fromEntries(qwiAnn.map(([st, ys]) => [st, Object.fromEntries(ys.map(y => [y[0], y.slice(1)]))]));
+  const r2 = (x) => Math.round((x + 1e-9) * 100) / 100;
+  return states.map(({ code }) => {
+    const ys = [];
+    for (let y = from; y <= to; y++) {
+      const o = series[y] && series[y][code];
+      if (!o) throw new Error(`OEWS ${y} has no row for ${code}`);
+      const t = (q[code] && q[code][y]) || [null, null, null];
+      ys.push([y, o[0], o[1], r2(o[1] * cpi[to] / cpi[y]), ...t]);
+    }
+    return [code, ys];
+  });
+}
+
+// ---------- Market size (W6) ----------
+// County Business Patterns state or US text file (cbpYYst.txt / cbpYYus.txt inside the zip), all legal forms (lfo "-").
+// Returns rows of the named fields for the given 6-digit NAICS codes; numeric fields as numbers, flags and codes as strings.
+export function cbpRows(txt, naics, fields) {
+  const L = txt.split(/\r?\n/); const h = L[0].split(',').map(x => x.replace(/"/g, '').toLowerCase());
+  const ix = fields.map(f => { const i = h.indexOf(f); if (i < 0) throw new Error(`CBP field ${f} missing`); return i; });
+  const iN = h.indexOf('naics'), iL = h.indexOf('lfo');
+  const text = new Set(['fipstate', 'naics', 'lfo', 'emp_nf', 'ap_nf', 'qp1_nf']);
+  return L.slice(1).filter(Boolean).map(l => l.split(',').map(x => x.replace(/"/g, ''))).filter(c => naics.includes(c[iN]) && c[iL] === '-')
+    .map(c => ix.map((i, k) => (text.has(fields[k]) ? c[i] : +c[i])));
+}
+// BLS National Employment Matrix page for one occupation (data.bls.gov/projections/nationalMatrix?queryParams=31-1120&ioType=o):
+// [code, title, employment 2025 (thousands), projected 2035 (thousands)] for the given industry codes, in page order.
+export function epMatrixRows(html, codes) {
+  const out = [];
+  for (const tr of html.split(/<tr[\s>]/i).slice(1)) {
+    const cells = [...tr.split(/<\/tr>/i)[0].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(m => m[1].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim());
+    if (cells.length > 6 && codes.includes(cells[1])) out.push([cells[1], cells[0], +cells[3].replace(/,/g, ''), +cells[6].replace(/,/g, '')]);
+  }
+  return out;
+}
+// ACS table-based summary file (.dat, pipe-delimited): the named columns for rows whose GEO_ID starts with a prefix, values as printed.
+export function acsRows(dat, cols, geoPrefix = '0100000US') {
+  const L = dat.split(/\r?\n/); const h = L[0].split('|'); const ix = cols.map(c => { const i = h.indexOf(c); if (i < 0) throw new Error(`ACS column ${c} missing`); return i; });
+  return L.slice(1).filter(l => l.startsWith(geoPrefix)).map(l => { const c = l.split('|'); return [c[0], ...ix.map(i => c[i])]; });
+}
+// The market object embedded in marketData.ts (MARKET_JSON).
+// oewsAides: May 2025 national aides employment (site_national.json). ep: epMatrixRows output. acs: acsRows output for B24114 E/M 001, 244, 245.
+// cbpSt: cbpRows(state file, ['621610','624120'], ['fipstate','naics','emp_nf','emp','est']); cbpUs: cbpRows(US file, same NAICS, ['naics','emp_nf','emp','est','n<5','n5_9','n10_19','n20_49','n50_99','n100_249','n250_499','n500_999','n1000']).
+export function buildMarket(oewsAides, ep, acs, cbpSt, cbpUs, states) {
+  const e = Object.fromEntries(ep.map(r => [r[0], Math.round(r[2] * 1000)]));
+  const a = acs[0].slice(1).map(Number);
+  const moe = Math.round(Math.sqrt(a[3] ** 2 + a[5] ** 2));
+  const byF = {}; for (const r of cbpSt) (byF[r[0]] = byF[r[0]] || {})[r[1]] = r;
+  const r1 = (x) => Math.round(x * 10) / 10;
+  const st = states.map(({ code, fips }) => {
+    const h = byF[fips] && byF[fips]['621610'], s = byF[fips] && byF[fips]['624120'];
+    if (!h || !s) throw new Error(`CBP rows missing for ${fips}`);
+    return [code, h[4], h[3], h[2], r1(h[3] / h[4]), s[4], s[3], s[2], r1(s[3] / s[4])];
+  });
+  const us = cbpUs.map(r => ({ naics: r[0], emp: r[2], empFlag: r[1], est: r[3], perEst: r1(r[2] / r[3]), sizes: r.slice(4), under20: r1((r[4] + r[5] + r[6]) / r[3] * 100) }));
+  return {
+    counts: {
+      oews2025: oewsAides,
+      ep2025: { total: e.TE1000, wageSalary: e.TE1200, selfEmployed: e.TE1100, privateHouseholds: e['814000'], homeHealthCare: e['621600'], elderlyDisabled: e['624120'] },
+      acs2025: { homeHealthAides: [a[2], a[3]], personalCareAides: [a[4], a[5]], total: [a[2] + a[4], moe], allOccupations: [a[0], a[1]] },
+    },
+    cbp2023: { us, sizeClasses: ['<5', '5-9', '10-19', '20-49', '50-99', '100-249', '250-499', '500-999', '1000+'], stateFields: ['code', 'est621610', 'emp621610', 'flag621610', 'perEst621610', 'est624120', 'emp624120', 'flag624120', 'perEst624120'], state: st },
+  };
+}
+
 // ---------- Census Vintage 2025 civilian population by single year of age (sc-est2025-agesex-civ.csv) ----------
 export function censusCivPop(csv, year = 2025) {
   const lines = csv.trim().split(/\r?\n/);

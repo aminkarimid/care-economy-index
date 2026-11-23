@@ -34,6 +34,10 @@ const URLS = {
   oewsNat: (yy) => `https://www.bls.gov/oes/special-requests/oesm${yy}nat.zip`,
   oewsSt: 'https://www.bls.gov/oes/special-requests/oesm25st.zip',
   oewsSt24: 'https://www.bls.gov/oes/special-requests/oesm24st.zip',
+  oewsStYear: (yy) => `https://www.bls.gov/oes/special-requests/oesm${yy}st.zip`,
+  epMatrix: 'https://data.bls.gov/projections/nationalMatrix?queryParams=31-1120&ioType=o',
+  cbpSt: 'https://www2.census.gov/programs-surveys/cbp/datasets/2023/cbp23st.zip',
+  cbpUs: 'https://www2.census.gov/programs-surveys/cbp/datasets/2023/cbp23us.zip',
   dol: 'https://www.dol.gov/agencies/whd/state/minimum-wage/history',
   bea: 'https://apps.bea.gov/regional/zip/SARPP.zip',
   acsShells: 'https://www2.census.gov/programs-surveys/acs/summary_file/2025/table-based-SF/documentation/ACS20251YR_Table_Shells.txt',
@@ -51,6 +55,7 @@ const URLS = {
     'Census Vintage 2026 civilian population by age': 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2026/state/asrh/sc-est2026-agesex-civ.csv',
     'KFF chart WNQfV version 6': 'https://datawrapper.dwcdn.net/WNQfV/6/dataset.csv',
     'KFF HCBS rates table 5M0i2 version 5': 'https://datawrapper.dwcdn.net/5M0i2/5/dataset.csv',
+    'County Business Patterns 2024 state file': 'https://www2.census.gov/programs-surveys/cbp/datasets/2024/cbp24st.zip',
     'ACS 2026 1-year table-based summary file': 'https://www2.census.gov/programs-surveys/acs/summary_file/2026/table-based-SF/data/1YRData/acsdt1y2026-b18107.dat',
   },
 };
@@ -213,6 +218,7 @@ async function main() {
   // Turnover layer (src/data/qwiData.ts): QWI. A release probe always; the full rebuild (about 900 MB of downloads) only with CAREDEX_QWI=1.
   const qwiVer = await step('QWI release (MA version file)', () => get(URLS.qwi('ma', 'version_qwi.txt'), 'text'));
   if (qwiVer && !qwiVer.includes(URLS.qwiRelease)) releases.push(`QWI has a release newer than ${URLS.qwiRelease}: ${qwiVer.trim().split(/\r?\n/)[0]}`);
+  let qwiByState = null, qwiOrder = null;
   if (process.env.CAREDEX_QWI === '1') {
     const { Readable } = await import('node:stream');
     const zlib = await import('node:zlib');
@@ -226,8 +232,39 @@ async function main() {
         ...await S.qwiPick(await lines(URLS.qwi(st, `qwi_${st}_rh_f_gs_ns_op_u.csv.gz`)), ['00'])]);
       if (rows) byState[st] = rows;
     }
-    if (Object.keys(byState).length === order.length) compareCanon('Turnover layer (QWI)', 'site_qwi.json', JSON.stringify(S.buildQwi(byState, order)), URLS.qwi('<st>', ''));
+    if (Object.keys(byState).length === order.length) {
+      compareCanon('Turnover layer (QWI)', 'site_qwi.json', JSON.stringify(S.buildQwi(byState, order)), URLS.qwi('<st>', ''));
+      qwiByState = byState; qwiOrder = order;
+    }
   } else notes.push('QWI full rebuild skipped (set CAREDEX_QWI=1 to run it; about 900 MB of downloads).');
+
+  // State trends (src/data/trendData.ts, TREND_JSON): OEWS state files May 2019 to May 2025, CPI-U May, QWI annual turnover.
+  // Without CAREDEX_QWI=1 the QWI columns are taken from the snapshot, so only the OEWS and CPI parts are re-checked.
+  const series = {};
+  for (const y of [2019, 2020, 2021, 2022, 2023, 2024, 2025]) {
+    const yy = String(y).slice(2);
+    const r = await step(`OEWS May ${y} state file (trends)`, async () => S.oewsStateYear(await S.oewsStateRows(await get(URLS.oewsStYear(yy))), siteStates));
+    if (r) series[y] = r;
+  }
+  const cpiNow = await step('FRED CPIAUCNS (trends)', async () => JSON.parse(S.cpiMay(await get(URLS.cpi, 'text'))));
+  if (Object.keys(series).length === 7 && cpiNow) {
+    const snap = JSON.parse(readExp('site_trends.json'));
+    const qwiAnn = qwiByState ? S.qwiAnnual(qwiByState, qwiOrder) : snap.map(([code, ys]) => [code, ys.filter(y => y[0] <= 2024).map(y => [y[0], y[4], y[5], y[6]])]);
+    compareCanon(`State trends (OEWS 2019-2025, CPI-U${qwiByState ? ', QWI annual' : '; QWI columns from snapshot'})`, 'site_trends.json',
+      await step('build trends', () => JSON.stringify(S.buildTrends(series, cpiNow, qwiAnn, siteStates))), `${URLS.oewsStYear('YY')} ; ${URLS.cpi}`);
+  }
+
+  // Market size (src/data/marketData.ts, MARKET_JSON): OEWS national, EP matrix, ACS B24114, County Business Patterns 2023.
+  const zipText = async (url) => { const z = await S.unzip(await get(url)); const n = z.names.find(k => /\.txt$/i.test(k)); if (!n) throw new Error(`no .txt in ${url}`); return new TextDecoder().decode(await z.get(n)); };
+  const N6 = ['621610', '624120'];
+  compareCanon('Market size (OEWS, EP matrix, ACS B24114, CBP 2023)', 'site_market.json',
+    await step('build market', async () => JSON.stringify(S.buildMarket(
+      siteNational.occupations.find(o => o.soc === '31-1120').employment,
+      S.epMatrixRows(await get(URLS.epMatrix, 'text'), ['TE1000', 'TE1100', 'TE1200', '621600', '624120', '814000']),
+      S.acsRows(await get(URLS.acs('b24114'), 'text'), ['B24114_E001', 'B24114_M001', 'B24114_E244', 'B24114_M244', 'B24114_E245', 'B24114_M245']),
+      S.cbpRows(await zipText(URLS.cbpSt), N6, ['fipstate', 'naics', 'emp_nf', 'emp', 'est']),
+      S.cbpRows(await zipText(URLS.cbpUs), N6, ['naics', 'emp_nf', 'emp', 'est', 'n<5', 'n5_9', 'n10_19', 'n20_49', 'n50_99', 'n100_249', 'n250_499', 'n500_999', 'n1000']),
+      siteStates))), `${URLS.epMatrix} ; ${URLS.acs('b24114')} ; ${URLS.cbpSt} ; ${URLS.cbpUs}`);
 
   // Live site: does the deployed bundle still carry the snapshot values?
   let siteMissing;
@@ -235,12 +272,15 @@ async function main() {
     const html = await get(SITE, 'text');
     const js = html.match(/\/assets\/index-[\w-]+\.js/);
     if (!js) throw new Error('no /assets/index-*.js in the page');
-    const bundle = await get(new URL(js[0], SITE).href, 'text');
-    const canon = Object.fromEntries(['a1_cms', 'a2_ep', 'a3_cooper', 'a4_oews', 'a4_cpi', 'a5_kff'].map(n => [n, readExp(`${n}.json`)]));
+    let bundle = await get(new URL(js[0], SITE).href, 'text');
+    // Pages loaded on demand live in separate chunks; read every /assets/*.js the entry bundle names.
+    const chunks = [...new Set([...bundle.matchAll(/assets\/[\w.-]+\.js/g)].map(m => '/' + m[0]))].filter(c => c !== js[0]);
+    for (const c of chunks) bundle += '\n' + await get(new URL(c, SITE).href, 'text');
+    const canon = Object.fromEntries(['a1_cms', 'a2_ep', 'a3_cooper', 'a4_oews', 'a4_cpi', 'a5_kff', 'site_trends', 'site_market'].map(n => [n, readExp(`${n}.json`)]));
     siteMissing = S.siteChecks(bundle, { canon, states: siteStates, national: siteNational, indexRows: readIndexCsv(INDEX_CSV), pay: [...JSON.parse(readExp('site_pay.json')), ...readIndexComponents(INDEX_CSV), ...JSON.parse(readExp('site_need.json')), ...JSON.parse(readExp('site_qwi.json')).out, ...JSON.parse(readExp('site_qwi.json')).tr, ...JSON.parse(readExp('site_rates.json'))] });
     notes.push(`Site bundle checked: ${new URL(js[0], SITE).href}`);
   });
-  if (siteMissing && siteMissing.length === 0) ok.push('Live site carries every snapshot value (6 datasets, 51 states, national figures, 51 index rows, 51 pay rows, 51 index-component rows, 51 need rows, 51 turnover rows, 26 turnover-trend rows)');
+  if (siteMissing && siteMissing.length === 0) ok.push('Live site carries every snapshot value (8 datasets, 51 states, national figures, 51 index rows, 51 pay rows, 51 index-component rows, 51 need rows, 51 turnover rows, 26 turnover-trend rows)');
   if (siteMissing && siteMissing.length) changes.push({ name: 'Live site differs from the snapshots', source: SITE, diff: siteMissing.map(m => `not found in bundle: ${m}`) });
 
   // Newer releases
