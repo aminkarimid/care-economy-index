@@ -36,6 +36,10 @@ const URLS = {
   oewsSt24: 'https://www.bls.gov/oes/special-requests/oesm24st.zip',
   dol: 'https://www.dol.gov/agencies/whd/state/minimum-wage/history',
   bea: 'https://apps.bea.gov/regional/zip/SARPP.zip',
+  acsShells: 'https://www2.census.gov/programs-surveys/acs/summary_file/2025/table-based-SF/documentation/ACS20251YR_Table_Shells.txt',
+  acs: (t) => `https://www2.census.gov/programs-surveys/acs/summary_file/2025/table-based-SF/data/1YRData/acsdt1y2025-${t}.dat`,
+  qwi: (st, f) => `https://lehd.ces.census.gov/data/qwi/latest_release/${st}/${f}`,
+  qwiRelease: 'R2026Q4',
   cpi: 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS',
   kff: 'https://datawrapper.dwcdn.net/WNQfV/5/dataset.csv',
   census: 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2025/state/asrh/sc-est2025-agesex-civ.csv',
@@ -45,6 +49,7 @@ const URLS = {
     'OEWS May 2026 state file': 'https://www.bls.gov/oes/special-requests/oesm26st.zip',
     'Census Vintage 2026 civilian population by age': 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2026/state/asrh/sc-est2026-agesex-civ.csv',
     'KFF chart WNQfV version 6': 'https://datawrapper.dwcdn.net/WNQfV/6/dataset.csv',
+    'ACS 2026 1-year table-based summary file': 'https://www2.census.gov/programs-surveys/acs/summary_file/2026/table-based-SF/data/1YRData/acsdt1y2026-b18107.dat',
   },
 };
 
@@ -192,6 +197,31 @@ async function main() {
       await step('build pay', () => JSON.stringify(S.buildPay(m25, m24, dol, rpp, siteStates))), `${URLS.oewsSt} ; ${URLS.oewsSt24} ; ${URLS.dol} ; ${URLS.bea}`);
   }
 
+  // Need layer (src/data/needData.ts): ACS 2025 1-year B18107/B18106; KFF 2026 waiting lists come from the snapshot (KFF pages are not machine-readable).
+  const acs = await step('ACS 2025 B18107/B18106', async () => S.acsDisability(await get(URLS.acsShells, 'text'), await get(URLS.acs('b18107'), 'text'), await get(URLS.acs('b18106'), 'text')));
+  if (acs) compareCanon('Need layer (ACS 2025 B18107/B18106 with KFF 2026 snapshot)', 'site_need.json',
+    await step('build need', () => JSON.stringify(S.buildNeed(acs, JSON.parse(readExp('kff_waiting_2026.json')), siteStates))), `${URLS.acs('b18107')} ; ${URLS.acs('b18106')}`);
+  notes.push('KFF waiting lists (2026 survey) are checked by hand: https://www.kff.org/medicaid/state-indicator/number-of-people-waiting-for-hcbs-by-target-population-and-whether-states-screen-for-eligibility/');
+
+  // Turnover layer (src/data/qwiData.ts): QWI. A release probe always; the full rebuild (about 900 MB of downloads) only with CAREDEX_QWI=1.
+  const qwiVer = await step('QWI release (MA version file)', () => get(URLS.qwi('ma', 'version_qwi.txt'), 'text'));
+  if (qwiVer && !qwiVer.includes(URLS.qwiRelease)) releases.push(`QWI has a release newer than ${URLS.qwiRelease}: ${qwiVer.trim().split(/\r?\n/)[0]}`);
+  if (process.env.CAREDEX_QWI === '1') {
+    const { Readable } = await import('node:stream');
+    const zlib = await import('node:zlib');
+    const readline = await import('node:readline');
+    const order = ['al','ak','az','ar','ca','co','ct','de','dc','fl','ga','hi','id','il','in','ia','ks','ky','la','me','md','ma','mi','mn','ms','mo','mt','ne','nv','nh','nj','nm','ny','nc','nd','oh','ok','or','pa','ri','sc','sd','tn','tx','ut','vt','va','wa','wv','wi','wy'];
+    const lines = async (url) => { const r = await fetch(url, { headers: HEADERS }); if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`); return readline.createInterface({ input: Readable.fromWeb(r.body).pipe(zlib.createGunzip()), crlfDelay: Infinity }); };
+    const byState = {};
+    for (const st of order) {
+      const rows = await step(`QWI ${st}`, async () => [
+        ...await S.qwiPick(await lines(URLS.qwi(st, `qwi_${st}_rh_f_gs_n4_op_u.csv.gz`)), ['6216', '6241']),
+        ...await S.qwiPick(await lines(URLS.qwi(st, `qwi_${st}_rh_f_gs_ns_op_u.csv.gz`)), ['00'])]);
+      if (rows) byState[st] = rows;
+    }
+    if (Object.keys(byState).length === order.length) compareCanon('Turnover layer (QWI)', 'site_qwi.json', JSON.stringify(S.buildQwi(byState, order)), URLS.qwi('<st>', ''));
+  } else notes.push('QWI full rebuild skipped (set CAREDEX_QWI=1 to run it; about 900 MB of downloads).');
+
   // Live site: does the deployed bundle still carry the snapshot values?
   let siteMissing;
   await step('caredex.vercel.app bundle', async () => {
@@ -200,10 +230,10 @@ async function main() {
     if (!js) throw new Error('no /assets/index-*.js in the page');
     const bundle = await get(new URL(js[0], SITE).href, 'text');
     const canon = Object.fromEntries(['a1_cms', 'a2_ep', 'a3_cooper', 'a4_oews', 'a4_cpi', 'a5_kff'].map(n => [n, readExp(`${n}.json`)]));
-    siteMissing = S.siteChecks(bundle, { canon, states: siteStates, national: siteNational, indexRows: readIndexCsv(INDEX_CSV), pay: [...JSON.parse(readExp('site_pay.json')), ...readIndexComponents(INDEX_CSV)] });
+    siteMissing = S.siteChecks(bundle, { canon, states: siteStates, national: siteNational, indexRows: readIndexCsv(INDEX_CSV), pay: [...JSON.parse(readExp('site_pay.json')), ...readIndexComponents(INDEX_CSV), ...JSON.parse(readExp('site_need.json')), ...JSON.parse(readExp('site_qwi.json')).out, ...JSON.parse(readExp('site_qwi.json')).tr] });
     notes.push(`Site bundle checked: ${new URL(js[0], SITE).href}`);
   });
-  if (siteMissing && siteMissing.length === 0) ok.push('Live site carries every snapshot value (6 datasets, 51 states, national figures, 51 index rows, 51 pay rows, 51 index-component rows)');
+  if (siteMissing && siteMissing.length === 0) ok.push('Live site carries every snapshot value (6 datasets, 51 states, national figures, 51 index rows, 51 pay rows, 51 index-component rows, 51 need rows, 51 turnover rows, 26 turnover-trend rows)');
   if (siteMissing && siteMissing.length) changes.push({ name: 'Live site differs from the snapshots', source: SITE, diff: siteMissing.map(m => `not found in bundle: ${m}`) });
 
   // Newer releases

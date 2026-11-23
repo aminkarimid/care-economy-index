@@ -267,6 +267,73 @@ export function buildPay(m25, m24, dol, rpp, states, rppYear = '2024') {
   });
 }
 
+
+// ---------- Need layer (needData.ts): ACS 1-year table-based summary file B18107, B18106 ----------
+// shells: ACS<YYYY>1YR_Table_Shells.txt; b18107/b18106: acsdt1y<YYYY>-b1810x.dat. Returns {fips2: {ild:[e,moe], pop18:[e,moe], sc18:[e,moe]}}.
+export function acsDisability(shells, b18107, b18106) {
+  const sh = shells.split(/\r?\n/);
+  const labels = (t) => { let age = ''; return sh.filter(l => l.startsWith(t + '|')).map(l => l.split('|')).map(r => { if (+r[2] === 2) age = r[4]; return [r[3], +r[2], r[4], age]; }); };
+  const w07 = labels('B18107').filter(r => r[1] === 3 && /^With/.test(r[2])).map(r => r[0]);
+  const w06 = labels('B18106').filter(r => r[1] === 3 && /^With/.test(r[2]) && !/5 to 17/.test(r[3])).map(r => r[0]);
+  if (w07.length !== 8 || w06.length !== 8) throw new Error(`unexpected table shells (${w07.length}, ${w06.length})`);
+  const parse = (txt) => { const L = txt.trim().split(/\r?\n/); const h = L[0].split('|'); return { h, rows: L.slice(1).map(l => l.split('|')).filter(c => /^0400000US\d\d$/.test(c[0]) && c[0] !== '0400000US72') }; };
+  const sum = (d, ids, c) => { let e = 0, m2 = 0; for (const id of ids) { e += +c[d.h.indexOf(id.replace('_', '_E'))]; m2 += (+c[d.h.indexOf(id.replace('_', '_M'))]) ** 2; } return [e, Math.round(Math.sqrt(m2))]; };
+  const a = parse(b18107), b = parse(b18106), out = {};
+  for (const c of a.rows) out[c[0].slice(-2)] = { ild: sum(a, w07, c), pop18: [+c[a.h.indexOf('B18107_E001')], +c[a.h.indexOf('B18107_M001')]] };
+  for (const c of b.rows) { const k = c[0].slice(-2); if (out[k]) out[k].sc18 = sum(b, w06, c); }
+  return out;
+}
+const r1 = (x) => Math.round((x + 1e-9) * 10) / 10;
+// Rebuild NEED_RAW rows (ACS part and KFF part). kff: rows [name, screens, seniorsCell, totalCell] as printed by KFF.
+export function buildNeed(acs, kff, states) {
+  const byName = Object.fromEntries(kff.map(r => [r[0], r]));
+  return [...states].sort((a, b) => (a.code < b.code ? -1 : 1)).map(s => {
+    const a = acs[s.fips], k = byName[s.name];
+    if (!a || !a.sc18) throw new Error(`ACS rows missing for ${s.fips}`);
+    if (!k) throw new Error(`KFF row missing for ${s.name}`);
+    const [ild, ildm] = a.ild, [sc, scm] = a.sc18, [p, pm] = a.pop18;
+    return [s.code, ild, ildm, sc, scm, p, pm, r1(ild / p * 100), r1(s.aides / ild * 1000), r1(s.aides * 1000 * ildm / ild ** 2), r1(s.aides / sc * 1000), k[1], Number(String(k[3]).replace(/,/g, '')), k[2]];
+  });
+}
+
+
+// ---------- Turnover layer (qwiData.ts): LEHD QWI state files ----------
+// rows: arrays [year, quarter, industry, EmpS, HirA, Sep, TurnOvrS, sTurnOvrS, EarnS, sEarnS, sEmpS] for industries 6216, 6241, 00 (race A0, ethnicity A0).
+export const QWI_FIELDS = ['year', 'quarter', 'industry', 'EmpS', 'HirA', 'Sep', 'TurnOvrS', 'sTurnOvrS', 'EarnS', 'sEarnS', 'sEmpS'];
+// lines: any (async) iterable of CSV lines from a qwi_<st>_rh_f_gs_*_op_u.csv file, header first.
+export async function qwiPick(lines, industries) {
+  let h = null, ix, iInd, iY, iR, iE; const out = [];
+  for await (const l of lines) {
+    if (!l) continue;
+    if (!h) { h = l.split(','); ix = QWI_FIELDS.map(n => h.indexOf(n)); iInd = h.indexOf('industry'); iY = h.indexOf('year'); iR = h.indexOf('race'); iE = h.indexOf('ethnicity'); continue; }
+    if (!l.includes(',A0,A0,')) continue;
+    const c = l.split(','); if (c[iR] !== 'A0' || c[iE] !== 'A0' || !industries.includes(c[iInd]) || +c[iY] < 2019) continue;
+    out.push(ix.map(i => c[i]));
+  }
+  return out;
+}
+const QOK = (f) => ['1', '6', '10'].includes(f);
+const r3 = (x) => Math.round((x + 1e-12) * 1000) / 1000;
+// byState: {st (lower case): rows}. Returns {out, tr} as in qwiData.ts (QWI_STATE, QWI_TREND).
+export function buildQwi(byState, order, trendExclude = ['ak', 'mi'], trendTo = '2025Q2') {
+  const out = [], trend = {};
+  for (const st of order) {
+    const rows = (byState[st] || []).slice().sort((a, b) => (a[2] + a[0] + a[1]).localeCompare(b[2] + b[0] + b[1]));
+    const by = {}; for (const r of rows) (by[r[0] + 'Q' + r[1]] = by[r[0] + 'Q' + r[1]] || {})[r[2]] = r;
+    const good = Object.keys(by).sort().filter(q => ['6216', '6241', '00'].every(i => by[q][i] && by[q][i][6] !== '' && QOK(by[q][i][7])));
+    if (!trendExclude.includes(st)) for (const r of rows) { const q = r[0] + 'Q' + r[1]; if (q < '2019Q1' || q > trendTo || r[6] === '' || !QOK(r[7]) || !(+r[3] > 0)) continue; const t = trend[q] = trend[q] || {}; t[r[2] + 'w'] = (t[r[2] + 'w'] || 0) + (+r[3]); t[r[2] + 's'] = (t[r[2] + 's'] || 0) + (+r[3]) * (+r[6]); t[r[2] + 'n'] = (t[r[2] + 'n'] || 0) + 1; }
+    const last4 = good.slice(-4);
+    if (!(last4.length === 4 && last4[3] >= '2025Q1')) { out.push([st.toUpperCase(), null]); continue; }
+    const avg = (i, f, fl) => { const v = last4.map(q => by[q][i]).filter(r => r[f] !== '' && (fl === undefined || QOK(r[fl]))).map(r => +r[f]); return v.length === 4 ? v.reduce((a, b) => a + b, 0) / 4 : null; };
+    const t16 = r3(avg('6216', 6, 7)), t41 = r3(avg('6241', 6, 7)), t00 = r3(avg('00', 6, 7));
+    const rd = (v) => (v === null ? null : Math.round(v));
+    out.push([st.toUpperCase(), last4[0] + '-' + last4[3], t16, t41, t00, Math.round(t16 / t00 * 100) / 100, Math.round(t41 / t00 * 100) / 100,
+      rd(avg('6216', 8, 9)), rd(avg('6241', 8, 9)), rd(avg('00', 8, 9)), rd(avg('6216', 3)), rd(avg('6241', 3))]);
+  }
+  const tr = Object.keys(trend).sort().map(q => { const t = trend[q]; return [q, t['6216n'], t['6241n'], t['00n'], r3(t['6216s'] / t['6216w']), r3(t['6241s'] / t['6241w']), r3(t['00s'] / t['00w'])]; });
+  return { out, tr };
+}
+
 // ---------- Census Vintage 2025 civilian population by single year of age (sc-est2025-agesex-civ.csv) ----------
 export function censusCivPop(csv, year = 2025) {
   const lines = csv.trim().split(/\r?\n/);
@@ -346,7 +413,7 @@ export function siteLiterals({ states, national, indexRows }) {
 export function siteChecks(bundle, { canon, states, national, indexRows, pay = [] }) {
   const missing = Object.entries(canon).filter(([, json]) => !bundle.includes(json)).map(([name]) => `dataset ${name}`);
   for (const [label, lit] of siteLiterals({ states, national, indexRows })) if (!bundle.includes(lit)) missing.push(label);
-  for (const r of pay) if (!bundle.includes('[' + r.map(v => typeof v === 'string' ? JSON.stringify(v) : minNum(v)).join(',') + ']')) missing.push(`row ${r[0]} (${r.length === 16 ? "pay" : "index components"})`);
+  for (const r of pay) if (!bundle.includes('[' + r.map(v => v === null ? 'null' : typeof v === 'string' ? JSON.stringify(v) : minNum(v)).join(',') + ']')) missing.push(`row ${r[0]} (${r.length} fields)`);
   return missing;
 }
 
