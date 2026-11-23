@@ -2704,8 +2704,14 @@ def quality_sanity_checks(df:pd.DataFrame) -> bool:
         _spearman(df["MFI_v4"],df["PHI_Rank_Overall"])>0,critical=True)
     chk("MFI corr with PHI Economic positive",
         _spearman(df["MFI_v4"],df["PHI_Economic"])>0)
-    chk("MFI Spearman vs PHI > 0.80 (strong external validation)",
+    # Label corrected 23 Nov 2026: this check has always tested the legacy MFI_v4,
+    # not the headline MFI_v5. The MFI_v5 correlation is printed below for reference
+    # (reported in Appendix III.B of the SYPA; no threshold applies to it).
+    chk("MFI_v4 (legacy) Spearman vs PHI Rank Overall > 0.80",
         _spearman(df["MFI_v4"],df["PHI_Rank_Overall"])>0.80,critical=True)
+    if "MFI_v5" in df.columns:
+        print(f"  ℹ️  MFI_v5 (headline) Spearman vs PHI Rank Overall = "
+              f"{_spearman(df['MFI_v5'],df['PHI_Rank_Overall']):.3f} (no threshold)")
     chk("5 MFI bottleneck categories exist",
         df["MFI_bottleneck"].nunique()>=3)
 
