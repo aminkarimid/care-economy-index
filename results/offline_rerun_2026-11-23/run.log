@@ -1,0 +1,261 @@
+[SETUP] ✅ All packages present.
+
+
+=================================================================
+  SYPA Complete Pipeline v2.0 (A+ methodology)
+  2026-11-23 04:21
+=================================================================
+
+── PHASE 1: DATA ACQUISITION ──────────────────────────────
+
+────────────────────────────────────────────────────────────
+ℹ️  Optional API keys (all free — fallbacks work without them):
+   BLS_API_KEY → https://data.bls.gov/registrationEngine/
+   CENSUS_KEY → https://api.census.gov/data/key_signup.html
+   BEA_KEY → https://apps.bea.gov/api/signup/
+   Set: export BLS_API_KEY='key'
+────────────────────────────────────────────────────────────
+
+  Network: ⚠️  offline — using local fallbacks
+
+AUTOMATED SOURCES
+
+    [FETCH] BLS OEWS wages (SOC 31-1120)...
+    ⚠️  Network failed (ProxyError). Using fallback...
+    ✅ 51 states | local fallback (~2022)
+    [FETCH] Census ACS 2023 (B19049+B28005)...
+    ⚠️  Network failed (ProxyError). Using fallback...
+    ✅ 51 states | local fallback
+    [FETCH] BEA RPP 2024...
+    ⚠️  BEA ZIP failed (ProxyError). Using fallback...
+    ✅ 51 states | SARPP.xlsx fallback 2023
+    [FETCH] CMS LTSS B1...
+    ⚠️  CMS B1 failed. Using fallback...
+    ✅ CMS LTSS B1 | local fallback: B1_LTSSUsrRebalMeasr_2023.xlsx
+    [FETCH] CMS LTSS B2...
+    ⚠️  CMS B2 failed. Using fallback...
+    ✅ CMS LTSS B2 | local fallback: B2_LTSSExpRebalMeasr_2023.xlsx
+    [FETCH] CMS LTSS B3...
+    ⚠️  CMS B3 failed. Using fallback...
+    ❌ No fallback for CMS B3
+    [FETCH] BLS LAUS unemployment...
+    ⚠️  Network failed (ProxyError). Using fallback...
+    ✅ 51 states | macro.xlsx fallback
+    [FETCH] CareScout PDF...
+    ⚠️  PDF download failed (ProxyError).
+    ✅ 51 states | local fallback
+
+HARDCODED SOURCES
+
+    ✅ 51 states | PHI State Index 2024
+    ✅ 51 states | ADRC/NWD (AARP 2023)
+    ✅ 51 states | KFF screens (documentation only — HPAS drives GPI)
+    ✅ 51 states | MIT Living Wage (Mar 2026 fetch; ~35 states Feb 2026)
+    ✅ 51 states | AARP 2023 official rank (1=MN best, 51=WV worst)
+
+COMBINED WORKBOOK
+
+    ✅ Combined workbook → GPI_MFI_auto.xlsx
+
+── PHASE 2 & 3: COMPUTATION, VALIDATION & OUTPUTS ────────
+
+[INFO] Building master dataset...
+[WARN] B3 transitions file not found — skipping holdout validator
+[INFO] Wage floor applied to 3 state(s): ['Louisiana', 'Mississippi', 'Texas']
+[WARN] Cache P10 has no real variance (std=0.0000) — falling through to BLS_WAGE_COMPRESSION_DATA hardcode
+[INFO] Wage compression loaded from BLS_WAGE_COMPRESSION_DATA hardcode: 51/51 states  (std=0.0748)
+[INFO] Master: 51 states, 31 columns
+
+[INFO] Computing GPI v4 (geometric mean + HPAS)...
+[INFO] GPI v6: Spearman(v4,v6)=0.967  top-10 overlap=10/10
+[INFO] Computing MFI v5 (decomposed MF1/MF2 — A+ specification)...
+[INFO] Computing MFI_real (RPP-deflated robustness — Pillar 2)...
+[INFO] Assigning quadrants (using MFI_v5 as primary)...
+[INFO] Quadrant distribution (median split):
+Quadrant
+Double Bind          17
+High Performance     16
+Policy Bottleneck     9
+Market Failure        9
+[INFO] Computing PRI v4 (BAP weights — Pillar 4)...
+
+[INFO] PRI v6 (F×O bilateral gate):
+  F ≥ 60th pct: 21 states
+  O ≥ 60th pct: 21 states
+  EVV ≥ 0.60:   49 states
+  Combined eligible (F×O + EVV): 12 states
+  F×O / BAP top-10 overlap: 5/10 states in common
+
+[INFO] === TOP 10 STATES BY MFI_v5 (Market Friction) ===
+  Oklahoma               GPI=r34  MFI=r3   TrainGap | Market Failure
+  Montana                GPI=r6   MFI=r19  CostBurden | Double Bind
+  Nevada                 GPI=r18  MFI=r10  WageGap | Double Bind
+  Mississippi            GPI=r25  MFI=r1   TrainGap | Double Bind
+  Tennessee              GPI=r12  MFI=r7   TrainGap | Double Bind
+  West Virginia          GPI=r11  MFI=r15  WageComp | Double Bind
+  Ohio                   GPI=r38  MFI=r21  CostBurden | Market Failure
+  Kentucky               GPI=r20  MFI=r14  CostBurden | Double Bind
+  North Carolina         GPI=r2   MFI=r6   TrainGap | Double Bind
+  Iowa                   GPI=r31  MFI=r22  CostBurden | Market Failure
+
+[INFO] === PRI ELIGIBLE STATES (BAP weighted, ranked) ===
+  #1   Arizona                High Performance     score=0.890
+  #2   Hawaii                 High Performance     score=0.872
+  #3   Wisconsin              High Performance     score=0.863
+  #4   Minnesota              High Performance     score=0.824
+  #5   Ohio                   Market Failure       score=0.808
+  #6   Massachusetts          High Performance     score=0.803
+  #7   Oregon                 High Performance     score=0.794
+  #8   New Hampshire          Market Failure       score=0.772
+  #9   Pennsylvania           Market Failure       score=0.756
+  #10  Oklahoma               Market Failure       score=0.754
+  #11  Washington             High Performance     score=0.743
+  #12  Georgia                Market Failure       score=0.682
+
+[INFO] === VALIDATION REPORT (8 checks) ===
+                    Index                External  Spearman ρ  ✓                                                              Description
+                   GPI_v4              AARP_Score      -0.423  ✅                    Higher GPI_v6 → lower AARP score (official 2023 rank)
+                   GPI_v4        HCBS_Users_Share      -0.637  ✅                                    Higher GPI_v6 → lower HCBS user share
+  GPI_v6 vs GPI_v4_legacy               stability       0.967  ✅                            GPI v6 rank stability vs v4 (ρ≥0.95 required)
+                   MFI_v5        PHI_Rank_Overall       0.483  ✅                                   Higher MFI_v5 → worse PHI overall rank
+                   MFI_v5            PHI_Economic       0.106  ✅                                  Higher MFI_v5 → worse PHI economic rank
+       MFI_v5 vs MFI_real          RPP robustness       0.742 ⚠️ RPP-deflated MFI vs nominal: geometric MF2 substantially robust (ρ>0.70)
+           PRI F×O vs BAP               stability       0.500  ✅                          F×O / BAP top-10 overlap: 5/10 states in common
+          GPI_v4 × MFI_v5                       —       0.248  ✅                                   GPI-MFI independence (|ρ|<0.50 target)
+GPI_v4 × MFI_v5 (partial) RPP+Unemployment+Region      -0.076  ✅                          Partial GPI-MFI ρ controlling macros (Pillar 7)
+
+[INFO] RPP robustness: Spearman(MFI_v5, MFI_real) = 0.742 (✅ robust)
+
+[INFO] Saved: SYPA_Full_v5.csv
+[INFO] Saved: SYPA_GPI_MFI_v5.csv + SYPA_GPI_MFI_v4.csv
+[INFO] Saved: SYPA_PRI_v5.csv + SYPA_PRI_v4.csv
+[INFO] Saved: SYPA_Validation_v5.csv
+[INFO] HPAS appendix saved: SYPA_HPAS_Appendix_III.csv
+       HPAS=0: 11 states | HPAS=1: 8 | HPAS=2: 32
+[INFO] Scatter saved: outputs/SYPA_Scatter_v5.png
+
+=================================================================
+QUALITY & SANITY CHECKS (A+ — 40 points)
+=================================================================
+
+[1] COVERAGE
+  ✅  51 states/jurisdictions
+  ✅  No duplicate states
+  ✅  All 4 quadrants represented
+  ✅  GPI has no nulls
+  ✅  MFI has no nulls
+
+[2] GPI v4 STRUCTURAL CHECKS
+  ✅  GPI range [0.001, 1.0] (v6 hybrid: HPAS_mult=0.10 lowers floor)
+  ✅  GPI_c_rebal = sqrt(c1 × c2) within 1%
+  ✅  GPI v6 Spearman(v4,v6) >= 0.95 (got 0.967)
+  ✅  GPI rank 1 = worst governance (should be CA or high-HPAS)
+  ✅  GPI rank 51 = best governance (HPAS=0 state)
+  ✅  All HPAS=0 states in bottom 15 GPI (best governance)
+  ✅  GPI corr with AARP_Score negative
+  ✅  GPI corr with HCBS_Users_Share negative
+  ✅  No screening/waitlist column in index formula
+  ✅  GPI top-10 stable vs HPAS alt 0.15/0.55/1.00: overlap=10/10 >= 8
+  ✅  GPI top-10 stable vs HPAS alt 0.20/0.60/1.00: overlap=10/10 >= 8
+
+[3] MFI v4 STRUCTURAL CHECKS
+  ✅  MFI range [90, 115] (MPI 100-centered expected)
+  ✅  MFI corr with PHI Rank Overall positive
+  ✅  MFI corr with PHI Economic positive
+  ✅  MFI Spearman vs PHI > 0.80 (strong external validation)
+  ✅  5 MFI bottleneck categories exist
+
+[4] PRI v4 STRUCTURAL CHECKS
+  ✅  PRI eligible: 10–25 states (got 12)
+  ✅  PRI stage2 null only for ineligible states
+  ✅  PRI rank 1 state is eligible
+  ✅  No screen_policy_score in PRI
+  ✅  No demand_transparency_z in PRI
+
+[5] INDEX INDEPENDENCE
+  ✅  GPI-MFI |ρ| < 0.50 (got 0.308)
+  ✅  Double Bind states: both GPI and MFI_v5 above median
+
+[6] DATA INTEGRITY
+  ✅  Wage_Aide >= $11.49 (BLS P10 floor applied)
+  ✅  Wage_Gap positive (living wage > aide wage for all states)
+  ✅  Cost_Hourly in plausible range [$15–$60]
+  ✅  Income_65plus in plausible range [$30k–$150k]
+  ✅  MIT living wage highest = HI ($31.01) [got HI]
+  ✅  MIT living wage lowest = WV ($19.53) [got WV]
+
+[7] AARP VALIDATION
+  ✅  AARP best score = Minnesota (rank 1)
+  ✅  AARP worst score = West Virginia (rank 51)
+
+[8] OUTPUT FILES
+  ✅  SYPA_Full_v4.csv exists (51 rows)
+  ✅  SYPA_GPI_MFI_v4.csv exists (51 rows)
+  ✅  SYPA_PRI_v4.csv exists (51 rows)
+  ✅  SYPA_Validation_v4.csv exists (9 rows)
+
+[PILLAR 1] MFI v5 DECOMPOSITION
+  ✅  MFI_v5 column exists
+  ✅  MFI_MF1 column exists
+  ✅  MFI_MF2 column exists
+  ✅  MFI_v5 = 0.6*MF2 + 0.4*MF1 (formula check within 1%)
+  ✅  Training_Floor_Gap exists and in [0,1]
+  ✅  Wage_Compression_Ratio exists for all 51 states
+  ✅  Wage_Compression_Ratio in (0,1] range
+  ✅  Wage_Compression_Ratio has real state variance std>0.010 (got 0.0748) — hardcoded BLS_WAGE_COMPRESSION_DATA should give std≈0.04
+  ✅  WCR Washington > Mississippi (compressed > wide): WA=0.786 vs MS=0.698
+  ✅  MA training hours = 120 (PHCAST benchmark)
+  ✅  TX training hours = 0 (no mandate)
+
+[PILLAR 2] RPP DEFLATION ROBUSTNESS
+  ✅  MFI_real column exists
+  ✅  MFI_real has ≥30 non-null values (got 51)
+  ✅  Spearman(MFI_v5, MFI_real) > 0.70 (got 0.742) — substantially robust
+
+[PILLAR 3] B3 COMMUNITY TRANSITIONS HOLDOUT
+  ✅  B3_Transition_Rate_65plus column loaded
+  ⚠️  WARNING: B3 has ≥30 non-null values (got 0)
+
+[FIX 3] PRI v6 F×O BILATERAL GATE
+  ✅  PRI_F_score column exists
+  ✅  PRI_O_score column exists
+  ✅  PRI F×O eligible: 8-20 states (got 12)
+  ✅  All F×O eligible: F_score >= 0.60
+  ✅  All F×O eligible: O_score >= 0.60
+  ✅  PRI_BAP sensitivity column exists
+  ✅  F×O/BAP top-5 overlap >= 2 (got 2)
+
+[PILLAR 4] PRI DIGITAL READINESS
+  ✅  digital_readiness_65plus used in PRI (not all-ages)
+  ✅  Pop_65plus log-transform: no outlier dominance
+  ✅  Pop_65plus CA < 10M (guards against double-count regression)
+  ⚠️  WARNING: Pop_65plus CA likely Census Vintage 2024 (< 6.5M) — if ⚠️, set CENSUS_KEY and run --no-cache
+
+[PILLAR 5] SOBOL FILES (run with --fast to skip)
+  ⚠️  WARNING: Sobol sensitivity file exists
+
+[PILLAR 6] HPAS APPENDIX
+  ✅  HPAS appendix CSV exists
+  ✅  HPAS=0 states: exactly 11
+  ✅  HPAS=1 states: exactly 8
+  ✅  HPAS=2 states: exactly 32
+
+[PILLAR 7] PARTIAL CORRELATION + GPI-MFI ORTHOGONALITY
+  ✅  GPI-MFI_v5 raw |ρ|<0.50 (got 0.248)
+  ✅  Partial GPI-MFI_v5 ρ<0.35 controlling macros (got -0.076)
+
+[9] v5 OUTPUT FILES
+  ✅  SYPA_Full_v5.csv exists (51 rows)
+  ✅  SYPA_GPI_MFI_v5.csv exists (51 rows)
+  ✅  SYPA_PRI_v5.csv exists (51 rows)
+  ✅  SYPA_Validation_v5.csv exists (9 rows)
+
+─────────────────────────────────────────────────────────────────
+  ✅ ALL 75 CHECKS PASSED  (3 warnings)
+─────────────────────────────────────────────────────────────────
+
+=================================================================
+  PIPELINE COMPLETE
+  Outputs written to: outputs/
+=================================================================
+

@@ -1,0 +1,52 @@
+State,State Code,Region,HPAS Score,Authority Type,KFF Classification,Source
+Arizona,AZ,West,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Delaware,DE,South,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+District of Columbia,DC,South,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Hawaii,HI,West,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Idaho,ID,West,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Massachusetts,MA,Northeast,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Minnesota,MN,Midwest,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+New Hampshire,NH,Northeast,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+New York,NY,Northeast,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Vermont,VT,Northeast,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Wisconsin,WI,Midwest,0,Entitlement/Open — no enrollment cap (1115 or comparable),No waiting list reported (entitlement),KFF 2024 + MACPAC 2020 Table 2
+Alaska,AK,West,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+Illinois,IL,Midwest,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+Iowa,IA,Midwest,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+Oklahoma,OK,South,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+Oregon,OR,West,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+South Carolina,SC,South,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+Texas,TX,South,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+Washington,WA,West,1,Unscreened interest list — 1915(c) without pre-eligibility screening,"Interest list (unscreened, per KFF 2024 methodology note)",KFF 2024 + MACPAC 2020 Table 2
+Alabama,AL,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Arkansas,AR,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+California,CA,West,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Colorado,CO,West,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Connecticut,CT,Northeast,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Florida,FL,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Georgia,GA,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Indiana,IN,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Kansas,KS,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Kentucky,KY,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Louisiana,LA,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Maine,ME,Northeast,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Maryland,MD,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Michigan,MI,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Mississippi,MS,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Missouri,MO,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Montana,MT,West,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Nebraska,NE,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Nevada,NV,West,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+New Jersey,NJ,Northeast,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+New Mexico,NM,West,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+North Carolina,NC,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+North Dakota,ND,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Ohio,OH,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Pennsylvania,PA,Northeast,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Rhode Island,RI,Northeast,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+South Dakota,SD,Midwest,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Tennessee,TN,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Utah,UT,West,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Virginia,VA,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+West Virginia,WV,South,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"
+Wyoming,WY,West,2,Screened capped waiver — 1915(c) with pre-eligibility screening,Screened waiting list (Yes per KFF 2024 screening flag),"Default (32 states, MACPAC 2020)"

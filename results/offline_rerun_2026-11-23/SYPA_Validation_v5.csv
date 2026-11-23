@@ -1,0 +1,10 @@
+Index,External,Direction,Pearson r,Spearman ρ,✓,Description
+GPI_v4,AARP_Score,neg,-0.47,-0.423,✅,Higher GPI_v6 → lower AARP score (official 2023 rank)
+GPI_v4,HCBS_Users_Share,neg,-0.634,-0.637,✅,Higher GPI_v6 → lower HCBS user share
+GPI_v6 vs GPI_v4_legacy,stability,pos,0.971,0.967,✅,GPI v6 rank stability vs v4 (ρ≥0.95 required)
+MFI_v5,PHI_Rank_Overall,pos,0.479,0.483,✅,Higher MFI_v5 → worse PHI overall rank
+MFI_v5,PHI_Economic,pos,0.131,0.106,✅,Higher MFI_v5 → worse PHI economic rank
+MFI_v5 vs MFI_real,RPP robustness,pos,0.793,0.742,⚠️,RPP-deflated MFI vs nominal: geometric MF2 substantially robust (ρ>0.70)
+PRI F×O vs BAP,stability,pos,,0.5,✅,F×O / BAP top-10 overlap: 5/10 states in common
+GPI_v4 × MFI_v5,—,low,0.21,0.248,✅,GPI-MFI independence (|ρ|<0.50 target)
+GPI_v4 × MFI_v5 (partial),RPP+Unemployment+Region,low,,-0.076,✅,Partial GPI-MFI ρ controlling macros (Pillar 7)
