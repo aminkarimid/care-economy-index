@@ -3,561 +3,561 @@
   "code": "AL",
   "name": "Alabama",
   "fips": "01",
-  "pop2024": 5146020,
-  "pop65": 955901,
-  "share65": 18.6,
+  "pop2025": 5181269,
+  "pop65": 1009814,
+  "share65": 19.5,
   "aides": 20930,
   "medianWage": 13.39,
-  "aidesPer1000_65": 21.9
+  "aidesPer1000_65": 20.7
  },
  {
   "code": "AK",
   "name": "Alaska",
   "fips": "02",
-  "pop2024": 718543,
-  "pop65": 109206,
-  "share65": 15.2,
+  "pop2025": 715760,
+  "pop65": 116192,
+  "share65": 16.2,
   "aides": 6530,
   "medianWage": 19.11,
-  "aidesPer1000_65": 59.8
+  "aidesPer1000_65": 56.2
  },
  {
   "code": "AZ",
   "name": "Arizona",
   "fips": "04",
-  "pop2024": 7565095,
-  "pop65": 1488452,
-  "share65": 19.7,
+  "pop2025": 7607079,
+  "pop65": 1571773,
+  "share65": 20.7,
   "aides": 74540,
   "medianWage": 17.51,
-  "aidesPer1000_65": 50.1
+  "aidesPer1000_65": 47.4
  },
  {
   "code": "AR",
   "name": "Arkansas",
   "fips": "05",
-  "pop2024": 3084635,
-  "pop65": 562842,
-  "share65": 18.2,
+  "pop2025": 3111133,
+  "pop65": 591966,
+  "share65": 19.0,
   "aides": 19840,
   "medianWage": 13.3,
-  "aidesPer1000_65": 35.2
+  "aidesPer1000_65": 33.5
  },
  {
   "code": "CA",
   "name": "California",
   "fips": "06",
-  "pop2024": 39297676,
-  "pop65": 6521873,
-  "share65": 16.6,
+  "pop2025": 39222235,
+  "pop65": 6901168,
+  "share65": 17.6,
   "aides": 970150,
   "medianWage": 16.5,
-  "aidesPer1000_65": 148.8
+  "aidesPer1000_65": 140.6
  },
  {
   "code": "CO",
   "name": "Colorado",
   "fips": "08",
-  "pop2024": 5922969,
-  "pop65": 975901,
-  "share65": 16.5,
+  "pop2025": 5978053,
+  "pop65": 1029188,
+  "share65": 17.2,
   "aides": 44650,
   "medianWage": 18.53,
-  "aidesPer1000_65": 45.8
+  "aidesPer1000_65": 43.4
  },
  {
   "code": "CT",
   "name": "Connecticut",
   "fips": "09",
-  "pop2024": 3670099,
-  "pop65": 714203,
-  "share65": 19.5,
+  "pop2025": 3683203,
+  "pop65": 751845,
+  "share65": 20.4,
   "aides": 49510,
   "medianWage": 18.75,
-  "aidesPer1000_65": 69.3
+  "aidesPer1000_65": 65.9
  },
  {
   "code": "DE",
   "name": "Delaware",
   "fips": "10",
-  "pop2024": 1048534,
-  "pop65": 229028,
-  "share65": 21.8,
+  "pop2025": 1056560,
+  "pop65": 241321,
+  "share65": 22.8,
   "aides": 11820,
   "medianWage": 16.5,
-  "aidesPer1000_65": 51.6
+  "aidesPer1000_65": 49.0
  },
  {
   "code": "DC",
   "name": "District of Columbia",
   "fips": "11",
-  "pop2024": 699116,
-  "pop65": 90959,
-  "share65": 13.0,
+  "pop2025": 690354,
+  "pop65": 94423,
+  "share65": 13.7,
   "aides": 12810,
   "medianWage": 20.53,
-  "aidesPer1000_65": 140.8
+  "aidesPer1000_65": 135.7
  },
  {
   "code": "FL",
   "name": "Florida",
   "fips": "12",
-  "pop2024": 23310846,
-  "pop65": 5091262,
-  "share65": 21.8,
+  "pop2025": 23399622,
+  "pop65": 5346788,
+  "share65": 22.8,
   "aides": 90170,
   "medianWage": 16.25,
-  "aidesPer1000_65": 17.7
+  "aidesPer1000_65": 16.9
  },
  {
   "code": "GA",
   "name": "Georgia",
   "fips": "13",
-  "pop2024": 11125586,
-  "pop65": 1760341,
-  "share65": 15.8,
+  "pop2025": 11248340,
+  "pop65": 1884140,
+  "share65": 16.8,
   "aides": 50870,
   "medianWage": 14.07,
-  "aidesPer1000_65": 28.9
+  "aidesPer1000_65": 27.0
  },
  {
   "code": "HI",
   "name": "Hawaii",
   "fips": "15",
-  "pop2024": 1406187,
-  "pop65": 310324,
-  "share65": 22.1,
+  "pop2025": 1392960,
+  "pop65": 324150,
+  "share65": 23.3,
   "aides": 6150,
   "medianWage": 18.32,
-  "aidesPer1000_65": 19.8
+  "aidesPer1000_65": 19.0
  },
  {
   "code": "ID",
   "name": "Idaho",
   "fips": "16",
-  "pop2024": 1998196,
-  "pop65": 354407,
-  "share65": 17.7,
+  "pop2025": 2026377,
+  "pop65": 379157,
+  "share65": 18.7,
   "aides": 20770,
   "medianWage": 16.72,
-  "aidesPer1000_65": 58.6
+  "aidesPer1000_65": 54.8
  },
  {
   "code": "IL",
   "name": "Illinois",
   "fips": "17",
-  "pop2024": 12693926,
-  "pop65": 2271298,
-  "share65": 17.9,
+  "pop2025": 12696540,
+  "pop65": 2379145,
+  "share65": 18.7,
   "aides": 134100,
   "medianWage": 18.3,
-  "aidesPer1000_65": 59.0
+  "aidesPer1000_65": 56.4
  },
  {
   "code": "IN",
   "name": "Indiana",
   "fips": "18",
-  "pop2024": 6923251,
-  "pop65": 1213910,
-  "share65": 17.5,
+  "pop2025": 6972309,
+  "pop65": 1284435,
+  "share65": 18.4,
   "aides": 57050,
   "medianWage": 16.86,
-  "aidesPer1000_65": 47.0
+  "aidesPer1000_65": 44.4
  },
  {
   "code": "IA",
   "name": "Iowa",
   "fips": "19",
-  "pop2024": 3241257,
-  "pop65": 612379,
-  "share65": 18.9,
+  "pop2025": 3238173,
+  "pop65": 649656,
+  "share65": 20.1,
   "aides": 25800,
   "medianWage": 17.34,
-  "aidesPer1000_65": 42.1
+  "aidesPer1000_65": 39.7
  },
  {
   "code": "KS",
   "name": "Kansas",
   "fips": "20",
-  "pop2024": 2950274,
-  "pop65": 528177,
-  "share65": 17.9,
+  "pop2025": 2956931,
+  "pop65": 561319,
+  "share65": 19.0,
   "aides": 25350,
   "medianWage": 15.03,
-  "aidesPer1000_65": 48.0
+  "aidesPer1000_65": 45.2
  },
  {
   "code": "KY",
   "name": "Kentucky",
   "fips": "21",
-  "pop2024": 4572233,
-  "pop65": 826695,
-  "share65": 18.1,
+  "pop2025": 4590525,
+  "pop65": 868019,
+  "share65": 18.9,
   "aides": 31260,
   "medianWage": 17.52,
-  "aidesPer1000_65": 37.8
+  "aidesPer1000_65": 36.0
  },
  {
   "code": "LA",
   "name": "Louisiana",
   "fips": "22",
-  "pop2024": 4583145,
-  "pop65": 814527,
-  "share65": 17.8,
+  "pop2025": 4603516,
+  "pop65": 868225,
+  "share65": 18.9,
   "aides": 45060,
   "medianWage": 10.83,
-  "aidesPer1000_65": 55.3
+  "aidesPer1000_65": 51.9
  },
  {
   "code": "ME",
   "name": "Maine",
   "fips": "23",
-  "pop2024": 1404172,
-  "pop65": 330265,
-  "share65": 23.5,
+  "pop2025": 1414231,
+  "pop65": 347617,
+  "share65": 24.6,
   "aides": 18630,
   "medianWage": 18.55,
-  "aidesPer1000_65": 56.4
+  "aidesPer1000_65": 53.6
  },
  {
   "code": "MD",
   "name": "Maryland",
   "fips": "24",
-  "pop2024": 6233607,
-  "pop65": 1102000,
-  "share65": 17.7,
+  "pop2025": 6235616,
+  "pop65": 1149859,
+  "share65": 18.4,
   "aides": 46560,
   "medianWage": 18.29,
-  "aidesPer1000_65": 42.3
+  "aidesPer1000_65": 40.5
  },
  {
   "code": "MA",
   "name": "Massachusetts",
   "fips": "25",
-  "pop2024": 7132747,
-  "pop65": 1336934,
-  "share65": 18.7,
+  "pop2025": 7150633,
+  "pop65": 1421793,
+  "share65": 19.9,
   "aides": 117940,
   "medianWage": 19.67,
-  "aidesPer1000_65": 88.2
+  "aidesPer1000_65": 83.0
  },
  {
   "code": "MI",
   "name": "Michigan",
   "fips": "26",
-  "pop2024": 10138576,
-  "pop65": 1985923,
-  "share65": 19.6,
+  "pop2025": 10125925,
+  "pop65": 2076467,
+  "share65": 20.5,
   "aides": 95020,
   "medianWage": 16.83,
-  "aidesPer1000_65": 47.8
+  "aidesPer1000_65": 45.8
  },
  {
   "code": "MN",
   "name": "Minnesota",
   "fips": "27",
-  "pop2024": 5792546,
-  "pop65": 1057147,
-  "share65": 18.3,
+  "pop2025": 5829774,
+  "pop65": 1113573,
+  "share65": 19.1,
   "aides": 128680,
   "medianWage": 18.45,
-  "aidesPer1000_65": 121.7
+  "aidesPer1000_65": 115.6
  },
  {
   "code": "MS",
   "name": "Mississippi",
   "fips": "28",
-  "pop2024": 2932371,
-  "pop65": 528787,
-  "share65": 18.0,
+  "pop2025": 2943166,
+  "pop65": 571344,
+  "share65": 19.4,
   "aides": 21800,
   "medianWage": 11.47,
-  "aidesPer1000_65": 41.2
+  "aidesPer1000_65": 38.2
  },
  {
   "code": "MO",
   "name": "Missouri",
   "fips": "29",
-  "pop2024": 6230103,
-  "pop65": 1169583,
-  "share65": 18.8,
+  "pop2025": 6254936,
+  "pop65": 1230134,
+  "share65": 19.7,
   "aides": 94810,
   "medianWage": 15.9,
-  "aidesPer1000_65": 81.1
+  "aidesPer1000_65": 77.1
  },
  {
   "code": "MT",
   "name": "Montana",
   "fips": "30",
-  "pop2024": 1133895,
-  "pop65": 239351,
-  "share65": 21.1,
+  "pop2025": 1141363,
+  "pop65": 253772,
+  "share65": 22.2,
   "aides": 10400,
   "medianWage": 17.61,
-  "aidesPer1000_65": 43.5
+  "aidesPer1000_65": 41.0
  },
  {
   "code": "NE",
   "name": "Nebraska",
   "fips": "31",
-  "pop2024": 1999174,
-  "pop65": 349449,
-  "share65": 17.5,
+  "pop2025": 2011666,
+  "pop65": 368331,
+  "share65": 18.3,
   "aides": 13660,
   "medianWage": 17.38,
-  "aidesPer1000_65": 39.1
+  "aidesPer1000_65": 37.1
  },
  {
   "code": "NV",
   "name": "Nevada",
   "fips": "32",
-  "pop2024": 3255772,
-  "pop65": 575966,
-  "share65": 17.7,
+  "pop2025": 3270558,
+  "pop65": 599211,
+  "share65": 18.3,
   "aides": 17940,
   "medianWage": 16.19,
-  "aidesPer1000_65": 31.1
+  "aidesPer1000_65": 29.9
  },
  {
   "code": "NH",
   "name": "New Hampshire",
   "fips": "33",
-  "pop2024": 1408510,
-  "pop65": 303344,
-  "share65": 21.5,
+  "pop2025": 1414775,
+  "pop65": 325383,
+  "share65": 23.0,
   "aides": 9440,
   "medianWage": 18.64,
-  "aidesPer1000_65": 31.1
+  "aidesPer1000_65": 29.0
  },
  {
   "code": "NJ",
   "name": "New Jersey",
   "fips": "34",
-  "pop2024": 9493352,
-  "pop65": 1706102,
-  "share65": 18.0,
+  "pop2025": 9540734,
+  "pop65": 1767250,
+  "share65": 18.5,
   "aides": 117080,
   "medianWage": 17.83,
-  "aidesPer1000_65": 68.6
+  "aidesPer1000_65": 66.2
  },
  {
   "code": "NM",
   "name": "New Mexico",
   "fips": "35",
-  "pop2024": 2116914,
-  "pop65": 429581,
-  "share65": 20.3,
+  "pop2025": 2112025,
+  "pop65": 448253,
+  "share65": 21.2,
   "aides": 38910,
   "medianWage": 13.71,
-  "aidesPer1000_65": 90.6
+  "aidesPer1000_65": 86.8
  },
  {
   "code": "NY",
   "name": "New York",
   "fips": "36",
-  "pop2024": 19847942,
-  "pop65": 3754552,
-  "share65": 18.9,
+  "pop2025": 19983073,
+  "pop65": 3860551,
+  "share65": 19.3,
   "aides": 663140,
   "medianWage": 19.05,
-  "aidesPer1000_65": 176.6
+  "aidesPer1000_65": 171.8
  },
  {
   "code": "NC",
   "name": "North Carolina",
   "fips": "37",
-  "pop2024": 10949942,
-  "pop65": 1974069,
-  "share65": 18.0,
+  "pop2025": 11098257,
+  "pop65": 2119438,
+  "share65": 19.1,
   "aides": 58880,
   "medianWage": 15.02,
-  "aidesPer1000_65": 29.8
+  "aidesPer1000_65": 27.8
  },
  {
   "code": "ND",
   "name": "North Dakota",
   "fips": "38",
-  "pop2024": 789463,
-  "pop65": 137764,
-  "share65": 17.5,
+  "pop2025": 792230,
+  "pop65": 143139,
+  "share65": 18.1,
   "aides": 7730,
   "medianWage": 18.96,
-  "aidesPer1000_65": 56.1
+  "aidesPer1000_65": 54.0
  },
  {
   "code": "OH",
   "name": "Ohio",
   "fips": "39",
-  "pop2024": 11876876,
-  "pop65": 2269539,
-  "share65": 19.1,
+  "pop2025": 11893865,
+  "pop65": 2398129,
+  "share65": 20.2,
   "aides": 106940,
   "medianWage": 16.57,
-  "aidesPer1000_65": 47.1
+  "aidesPer1000_65": 44.6
  },
  {
   "code": "OK",
   "name": "Oklahoma",
   "fips": "40",
-  "pop2024": 4076488,
-  "pop65": 691883,
-  "share65": 17.0,
+  "pop2025": 4104657,
+  "pop65": 741085,
+  "share65": 18.1,
   "aides": 20310,
   "medianWage": 13.32,
-  "aidesPer1000_65": 29.4
+  "aidesPer1000_65": 27.4
  },
  {
   "code": "OR",
   "name": "Oregon",
   "fips": "41",
-  "pop2024": 4270922,
-  "pop65": 850804,
-  "share65": 19.9,
+  "pop2025": 4272269,
+  "pop65": 898568,
+  "share65": 21.0,
   "aides": 42330,
   "medianWage": 21.35,
-  "aidesPer1000_65": 49.8
+  "aidesPer1000_65": 47.1
  },
  {
   "code": "PA",
   "name": "Pennsylvania",
   "fips": "42",
-  "pop2024": 13075943,
-  "pop65": 2665932,
-  "share65": 20.4,
+  "pop2025": 13056583,
+  "pop65": 2799790,
+  "share65": 21.4,
   "aides": 257370,
   "medianWage": 14.14,
-  "aidesPer1000_65": 96.5
+  "aidesPer1000_65": 91.9
  },
  {
   "code": "RI",
   "name": "Rhode Island",
   "fips": "44",
-  "pop2024": 1108283,
-  "pop65": 218599,
-  "share65": 19.7,
+  "pop2025": 1110421,
+  "pop65": 233061,
+  "share65": 21.0,
   "aides": 7490,
   "medianWage": 21.0,
-  "aidesPer1000_65": 34.3
+  "aidesPer1000_65": 32.1
  },
  {
   "code": "SC",
   "name": "South Carolina",
   "fips": "45",
-  "pop2024": 5441738,
-  "pop65": 1076945,
-  "share65": 19.8,
+  "pop2025": 5532405,
+  "pop65": 1173259,
+  "share65": 21.2,
   "aides": 40750,
   "medianWage": 14.48,
-  "aidesPer1000_65": 37.8
+  "aidesPer1000_65": 34.7
  },
  {
   "code": "SD",
   "name": "South Dakota",
   "fips": "46",
-  "pop2024": 921481,
-  "pop65": 173800,
-  "share65": 18.9,
+  "pop2025": 931875,
+  "pop65": 181082,
+  "share65": 19.4,
   "aides": 4210,
   "medianWage": 18.15,
-  "aidesPer1000_65": 24.2
+  "aidesPer1000_65": 23.2
  },
  {
   "code": "TN",
   "name": "Tennessee",
   "fips": "47",
-  "pop2024": 7207513,
-  "pop65": 1277959,
-  "share65": 17.7,
+  "pop2025": 7295032,
+  "pop65": 1360588,
+  "share65": 18.7,
   "aides": 35950,
   "medianWage": 15.45,
-  "aidesPer1000_65": 28.1
+  "aidesPer1000_65": 26.4
  },
  {
   "code": "TX",
   "name": "Texas",
   "fips": "48",
-  "pop2024": 31179223,
-  "pop65": 4362712,
-  "share65": 14.0,
+  "pop2025": 31595099,
+  "pop65": 4711381,
+  "share65": 14.9,
   "aides": 329590,
   "medianWage": 11.65,
-  "aidesPer1000_65": 75.5
+  "aidesPer1000_65": 70.0
  },
  {
   "code": "UT",
   "name": "Utah",
   "fips": "49",
-  "pop2024": 3499189,
-  "pop65": 433073,
-  "share65": 12.4,
+  "pop2025": 3534499,
+  "pop65": 460179,
+  "share65": 13.0,
   "aides": 17130,
   "medianWage": 17.25,
-  "aidesPer1000_65": 39.6
+  "aidesPer1000_65": 37.2
  },
  {
   "code": "VT",
   "name": "Vermont",
   "fips": "50",
-  "pop2024": 648358,
-  "pop65": 147621,
-  "share65": 22.8,
+  "pop2025": 644535,
+  "pop65": 155289,
+  "share65": 24.1,
   "aides": 7700,
   "medianWage": 20.0,
-  "aidesPer1000_65": 52.2
+  "aidesPer1000_65": 49.6
  },
  {
   "code": "VA",
   "name": "Virginia",
   "fips": "51",
-  "pop2024": 8710778,
-  "pop65": 1547113,
-  "share65": 17.8,
+  "pop2025": 8778904,
+  "pop65": 1633891,
+  "share65": 18.6,
   "aides": 70070,
   "medianWage": 14.57,
-  "aidesPer1000_65": 45.3
+  "aidesPer1000_65": 42.9
  },
  {
   "code": "WA",
   "name": "Washington",
   "fips": "53",
-  "pop2024": 7910036,
-  "pop65": 1379589,
-  "share65": 17.4,
+  "pop2025": 7953014,
+  "pop65": 1460563,
+  "share65": 18.4,
   "aides": 103260,
   "medianWage": 22.95,
-  "aidesPer1000_65": 74.8
+  "aidesPer1000_65": 70.7
  },
  {
   "code": "WV",
   "name": "West Virginia",
   "fips": "54",
-  "pop2024": 1769795,
-  "pop65": 387446,
-  "share65": 21.9,
+  "pop2025": 1765970,
+  "pop65": 398189,
+  "share65": 22.5,
   "aides": 18890,
   "medianWage": 13.47,
-  "aidesPer1000_65": 48.8
+  "aidesPer1000_65": 47.4
  },
  {
   "code": "WI",
   "name": "Wisconsin",
   "fips": "55",
-  "pop2024": 5959809,
-  "pop65": 1168733,
-  "share65": 19.6,
+  "pop2025": 5971589,
+  "pop65": 1241547,
+  "share65": 20.8,
   "aides": 82430,
   "medianWage": 17.47,
-  "aidesPer1000_65": 70.5
+  "aidesPer1000_65": 66.4
  },
  {
   "code": "WY",
   "name": "Wyoming",
   "fips": "56",
-  "pop2024": 585264,
-  "pop65": 115668,
-  "share65": 19.8,
+  "pop2025": 586280,
+  "pop65": 121648,
+  "share65": 20.7,
   "aides": 3410,
   "medianWage": 15.96,
-  "aidesPer1000_65": 29.5
+  "aidesPer1000_65": 28.0
  }
 ]

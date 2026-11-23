@@ -35,12 +35,12 @@ const URLS = {
   oewsSt: 'https://www.bls.gov/oes/special-requests/oesm25st.zip',
   cpi: 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS',
   kff: 'https://datawrapper.dwcdn.net/WNQfV/5/dataset.csv',
-  census: 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/asrh/sc-est2024-agesex-civ.csv',
+  census: 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2025/state/asrh/sc-est2025-agesex-civ.csv',
   // Newer releases. A 200 here means the site could move to newer data.
   probes: {
     'OEWS May 2026 national file': 'https://www.bls.gov/oes/special-requests/oesm26nat.zip',
     'OEWS May 2026 state file': 'https://www.bls.gov/oes/special-requests/oesm26st.zip',
-    'Census Vintage 2025 civilian population by age': 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2025/state/asrh/sc-est2025-agesex-civ.csv',
+    'Census Vintage 2026 civilian population by age': 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2026/state/asrh/sc-est2026-agesex-civ.csv',
     'KFF chart WNQfV version 6': 'https://datawrapper.dwcdn.net/WNQfV/6/dataset.csv',
   },
 };
@@ -151,19 +151,19 @@ async function main() {
     await step('KFF dataset.csv', async () => S.kffLtss(await get(URLS.kff, 'text'))), URLS.kff);
 
   // States and national figures
-  const census = await step('Census civilian population', async () => S.censusCivPop(await get(URLS.census, 'text')));
+  const census = await step('Census civilian population', async () => S.censusCivPop(await get(URLS.census, 'text'), 2025));
   const oewsSt = await step('OEWS May 2025 state file', async () => S.oewsStates(await get(URLS.oewsSt)));
   const siteStates = JSON.parse(readExp('site_states.json'));
   const siteNational = JSON.parse(readExp('site_national.json'));
   if (census && oewsSt) {
     const rebuilt = await step('build states', () => S.buildStates(oewsSt, census, siteStates)
       .map(r => ({ code: r.code, name: siteStates.find(s => s.code === r.code).name, ...r })));
-    compareObj('State figures (OEWS May 2025, Census V2024)', 'site_states.json', rebuilt, `${URLS.oewsSt} ; ${URLS.census}`);
+    compareObj('State figures (OEWS May 2025, Census V2025)', 'site_states.json', rebuilt, `${URLS.oewsSt} ; ${URLS.census}`);
   }
   if (census && nat2025 && ep) {
     const rebuilt = await step('build national', () =>
       S.buildNational(JSON.parse(S.oewsNationalDetail(nat2025, siteNational.occupations.map(o => o.soc))), ep, census));
-    compareObj('National figures (OEWS May 2025, EP 2025-35, Census V2024)', 'site_national.json', rebuilt, `${URLS.oewsNat('25')} ; ${URLS.ep} ; ${URLS.census}`);
+    compareObj('National figures (OEWS May 2025, EP 2025-35, Census V2025)', 'site_national.json', rebuilt, `${URLS.oewsNat('25')} ; ${URLS.ep} ; ${URLS.census}`);
   }
 
   // Live site: does the deployed bundle still carry the snapshot values?

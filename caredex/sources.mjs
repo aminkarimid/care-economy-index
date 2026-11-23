@@ -194,8 +194,8 @@ export async function oewsStates(stZip, occ = '31-1120') {
   return out;
 }
 
-// ---------- Census Vintage 2024 civilian population by single year of age (sc-est2024-agesex-civ.csv) ----------
-export function censusCivPop(csv, year = 2024) {
+// ---------- Census Vintage 2025 civilian population by single year of age (sc-est2025-agesex-civ.csv) ----------
+export function censusCivPop(csv, year = 2025) {
   const lines = csv.trim().split(/\r?\n/);
   const h = lines[0].split(',');
   const ix = (n) => h.indexOf(n);
@@ -223,7 +223,7 @@ export function buildStates(oewsSt, census, list) {
     if (!o) throw new Error(`OEWS state file has no row for ${code}`);
     if (!c) throw new Error(`Census file has no row for FIPS ${fips}`);
     return {
-      code, fips, pop2024: c.allAges, pop65: c.pop65, share65: round1(c.pop65 / c.allAges * 100),
+      code, fips, pop2025: c.allAges, pop65: c.pop65, share65: round1(c.pop65 / c.allAges * 100),
       aides: o.aides, medianWage: o.medianWage, aidesPer1000_65: round1(o.aides / c.pop65 * 1000),
     };
   });
@@ -260,11 +260,11 @@ export function minNum(v) {
 // The literal text each value should have in the bundle.
 export function siteLiterals({ states, national, indexRows }) {
   const n = minNum, out = [];
-  for (const s of states) out.push([`state ${s.code}`, `{code:"${s.code}",name:"${s.name}",fips:"${s.fips}",pop2024:${n(s.pop2024)},pop65:${n(s.pop65)},share65:${n(s.share65)},aides:${n(s.aides)},medianWage:${n(s.medianWage)},aidesPer1000_65:${n(s.aidesPer1000_65)}}`]);
+  for (const s of states) out.push([`state ${s.code}`, `{code:"${s.code}",name:"${s.name}",fips:"${s.fips}",pop2025:${n(s.pop2025)},pop65:${n(s.pop65)},share65:${n(s.share65)},aides:${n(s.aides)},medianWage:${n(s.medianWage)},aidesPer1000_65:${n(s.aidesPer1000_65)}}`]);
   for (const o of national.occupations) out.push([`occupation ${o.soc}`, `soc:"${o.soc}",p10:${n(o.p10)},median:${n(o.median)},p90:${n(o.p90)},employment:${n(o.employment)}`]);
   const p = national.projections, a = national.aides, u = national.population;
   const aides = national.occupations.find(o => o.soc === '31-1120');
-  out.push(['national figures', `{employment:${n(aides.employment)},medianHourly:${n(aides.median)},medianAnnual:${n(a.annualMedian)},meanHourly:${n(a.mean)},p10Hourly:${n(aides.p10)},p90Hourly:${n(aides.p90)},projEmployment2025:${n(p.emp2025)},projEmployment2035:${n(p.emp2035)},projChange:${n(p.change)},projChangePct:${n(p.pct)},annualOpenings:${n(p.openings)},population65plus2024:${n(u.pop65)},share65plus2024:${n(u.share65)}}`]);
+  out.push(['national figures', `{employment:${n(aides.employment)},medianHourly:${n(aides.median)},medianAnnual:${n(a.annualMedian)},meanHourly:${n(a.mean)},p10Hourly:${n(aides.p10)},p90Hourly:${n(aides.p90)},projEmployment2025:${n(p.emp2025)},projEmployment2035:${n(p.emp2035)},projChange:${n(p.change)},projChangePct:${n(p.pct)},annualOpenings:${n(p.openings)},population65plus2025:${n(u.pop65)},share65plus2025:${n(u.share65)}}`]);
   for (const r of indexRows) out.push([`index ${r.code}`, `{name:"${r.name}",code:"${r.code}",gpi:${n(r.gpi)},mfi:${n(r.mfi)},quadrant:"${r.quadrant}"}`]);
   return out;
 }
