@@ -18,7 +18,7 @@ const ROOT = join(HERE, '..');
 const OUT = join(HERE, 'out');
 const EXP = join(HERE, 'expected');
 const SITE = process.env.CAREDEX_URL || 'https://caredex.vercel.app/';
-const INDEX_CSV = process.env.CAREDEX_INDEX_CSV || join(ROOT, 'results/offline_rerun_2026-11-23/SYPA_GPI_MFI_v5.csv');
+const INDEX_CSV = process.env.CAREDEX_INDEX_CSV || join(ROOT, 'results/index_rebuild_2026-11-23/index_results_2026-11-23.csv');
 
 // Ordinary browser headers. No contact details are sent.
 const HEADERS = {
@@ -105,7 +105,7 @@ function compareObj(name, file, rebuilt, sourceUrl) {
   if (d.length === 0) ok.push(`${name} unchanged`); else changes.push({ name, source: sourceUrl, diff: d });
 }
 
-// Rows of src/data/indexComponents.ts, rebuilt from the thesis CSV (same column order as the site file).
+// Rows of src/data/indexComponents.ts, from the CareDex index rebuild CSV (same column order as the site file).
 function readIndexComponents(path) {
   const lines = readFileSync(path, 'utf8').trim().split(/\r?\n/);
   const h = lines[0].split(',');
@@ -119,7 +119,7 @@ function readIndexCsv(path) {
   const lines = readFileSync(path, 'utf8').trim().split(/\r?\n/);
   const h = lines[0].split(',');
   const ix = (n) => { const i = h.indexOf(n); if (i < 0) throw new Error(`column ${n} missing in ${path}`); return i; };
-  const [iN, iC, iG, iM, iQ] = ['State', 'state_code', 'GPI_v4', 'MFI_v5', 'Quadrant'].map(ix);
+  const [iN, iC, iG, iM, iQ] = ['State', 'state_code', 'GPI', 'MFI', 'Quadrant'].map(ix);
   return lines.slice(1).map(l => l.split(',')).map(c => ({ name: c[iN], code: c[iC], gpi: c[iG], mfi: c[iM], quadrant: c[iQ] }));
 }
 

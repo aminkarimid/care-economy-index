@@ -1,0 +1,52 @@
+State,state_code,HCBS_Users_Share,HCBS_Exp_Share,ADRC_Share,HPAS,KFF_screens,KFF_waiting_total,Cost_Hourly,Income_65plus,Wage_Aide,Wage_Living,Aide_Count,Pop_65plus,Wage_P10,Wage_Median_for_P10,Training_Hours,Training_Roles
+Alabama,AL,0.3756,0.1317,0.92,2,Yes,"2,272",25,47884,13.39,21.06,20930,1009814,10.81,13.39,0,"Personal Care Attendant (Agencies that receive Medicaid reimbursement under Elderly and Disabled, SAIL, and ACT waivers): 0"
+Alaska,AK,0.8397,0.447,0.53,1,No,734,34,67208,19.11,24.98,6530,116192,14.77,19.11,40,Personal Care Assistant (Agencies that receive Medicaid reimbursement): 40
+Arizona,AZ,0.6376,0.4627,0.58,0,N/A,0,36,57753,17.51,24.47,74540,1571773,14.9,17.51,0,Direct Care Worker (Agencies that receive Medicaid reimbursement): 0
+Arkansas,AR,0.5228,0.1717,0.66,2,Yes,2144,26,44695,13.3,20.01,19840,591966,11.51,13.3,40,In Home Assistant (All home care agencies): 40; Personal Care Aide (Agencies that receive Medicaid reimbursement): 40
+California,CA,0.4673,0.2212,0.42,2,Yes,24023,39,68292,16.5,30.48,970150,6901168,16.5,16.5,8,Affiliated Home Care Aide (All home care agencies): 10; Personal Care Provider (Medicaid Home and Community-Based Alternatives waiver): 8
+Colorado,CO,0.742,0.6219,0.56,2,Yes,2749,42,64210,18.53,26.0,44650,1029188,17.03,18.53,0,Personal Care Worker (Agencies that receive Medicaid reimbursement): 0
+Connecticut,CT,0.5928,0.4387,0.91,2,Yes,4380,35,66407,18.75,26.05,49510,751845,16.35,18.75,0,Personal Care Assistant (Agencies that receive Medicaid reimbursement): 0
+Delaware,DE,0.6051,0.4563,0.82,0,N/A,0,38,65590,16.5,23.79,11820,241321,15.0,16.5,0,Direct Care Worker (All home care agencies): 0
+District of Columbia,DC,0.6970999999999999,0.5768,0.89,0,N/A,0,34,65937,20.53,26.72,12810,94423,18.41,20.53,125,Home Health Aide (All home care agencies): 125; Home Health Aide (Home care agencies that receive Medicaid reimbursement): 125
+Florida,FL,0.642,0.5463,0.8,1,No,77123,30,55569,16.25,24.09,90170,5346788,14.74,16.25,40,Home Health Aide (All home care agencies): 40
+Georgia,GA,0.5625,0.3943,0.86,2,Yes,9063,29,53005,14.07,24.21,50870,1884140,11.4,14.07,40,Personal Care Assistant (All home care agencies): 40
+Hawaii,HI,0.7981,0.2216,0.77,0,N/A,0,42,78353,18.32,31.01,6150,324150,15.0,18.32,100,Personal Care Aide (All home care agencies): 100
+Idaho,ID,0.7216,0.4476,0.65,0,N/A,0,34,57539,16.72,23.6,20770,379157,13.47,16.72,0,Personal Care Attendant (Agencies that receive Medicaid reimbursement): 0
+Illinois,IL,0.6812,0.4342,0.81,2,Yes,17700,35,56316,18.3,24.42,134100,2379145,16.44,18.3,10,Home Services Worker (All home care agencies): 10; Home Care Aide (Agencies that receive reimbursement through the Medicaid Community Care Program): 24; Homemaker (Agencies that receive reimbursement through the Medicaid Home Services Program): 12
+Indiana,IN,0.5565,0.3622999999999999,0.64,2,Yes,28533,33,50047,16.86,21.79,57050,1284435,14.13,16.86,0,No training requirements in any Medicaid program
+Iowa,IA,0.4943999999999999,0.2294,0.55,1,No,28778,39,51575,17.34,21.29,25800,649656,14.63,17.34,0,No training requirements in any Medicaid program
+Kansas,KS,0.5505,0.3832,0.71,2,Yes,6792,32,52955,15.03,21.63,25350,561319,13.02,15.03,0,No training requirements in any Medicaid program
+Kentucky,KY,0.3342,0.2551,0.87,2,Yes,21683,34,44617,17.52,20.21,31260,868019,13.52,17.52,0,Personal Services Attendant (Agencies that receive Medicaid reimbursement; at least one consumer-directed program): 0
+Louisiana,LA,0.3429999999999999,0.2042,0.72,2,Yes,27120,22,44495,10.83,20.37,45060,868225,9.22,10.83,16,Direct Service Worker (All home care agencies): 16
+Maine,ME,0.3525999999999999,0.2702,0.55,2,Yes,2839,43,54821,18.55,24.74,18630,347617,16.89,18.55,50,Personal Support Specialist (Agencies that receive Medicaid reimbursement): 50
+Maryland,MD,0.5474,0.3636999999999999,0.84,2,Yes,33513,35,72118,18.29,25.94,46560,1149859,15.16,18.29,0,Personal Assistance Provider (Agencies that receive Medicaid reimbursement): 0
+Massachusetts,MA,0.6883,0.5173,0.93,0,N/A,0,38,63240,19.67,30.58,117940,1421793,17.77,19.67,60,Personal Care Homemaker (Agencies that receive Medicaid reimbursement): 60
+Michigan,MI,0.6459,0.4004999999999999,0.68,2,Yes,2994,34,52764,16.83,22.07,95020,2076467,13.4,16.83,0,Direct Care Worker (Agencies that receive Medicaid reimbursement under the Michigan Choice Waiver; consumer-directed programs under the Michigan Choice Waiver): 0
+Minnesota,MN,0.777,0.5084000000000001,0.92,0,N/A,0,43,57685,18.45,23.31,128680,1113573,15.87,18.45,0,Personal Care Assistant (Agencies that receive Medicaid reimbursement): 0
+Mississippi,MS,0.5385,0.2978,0.87,2,Yes,12441,25,41712,11.47,20.69,21800,571344,10.52,11.47,40,Personal Care Attendant (Agencies that receive Medicaid reimbursement): 40
+Missouri,MO,0.5861,0.4261999999999999,0.85,2,Yes,1835,33,50535,15.9,21.27,94810,1230134,13.75,15.9,12,Personal Care Aide (Agencies that receive Medicaid reimbursement): 12
+Montana,MT,0.5047999999999999,0.3565,0.44,2,Yes,2884,40,54222,17.61,24.23,10400,253772,14.12,17.61,16,Personal Care Attendant (Agencies that receive Medicaid reimbursement): 16
+Nebraska,NE,0.4708,0.3136,0.55,0,N/A,0,36,55124,17.38,21.75,13660,368331,14.74,17.38,0,No training requirements in any Medicaid program
+Nevada,NV,0.7304,0.4674,0.66,2,Yes,4016,38,59338,16.19,24.16,17940,599211,12.69,16.19,0,Personal Care Attendant (All home care agencies): 0
+New Hampshire,NH,0.4832,0.3195,0.95,0,N/A,0,39,63279,18.64,25.77,9440,325383,15.36,18.64,0,Personal Care Attendant (All home care agencies): 0
+New Jersey,NJ,0.6554000000000001,0.4397999999999999,0.88,2,Yes,3683,37,67177,17.83,27.35,117080,1767250,15.49,17.83,76,Certified Homemaker-Home Health Aide (All home care agencies): 76
+New Mexico,NM,0.7875,0.5482,0.41,1,No,18206,28,50637,13.71,21.93,38910,448253,12.69,13.71,12,Personal Care Attendant (Agencies that receive Medicaid reimbursement): 12
+New York,NY,0.8244,0.7151000000000001,0.87,2,Yes,465,34,57125,19.05,29.89,663140,3860551,17.77,19.05,40,Personal Care Aide (All home care agencies): 40
+North Carolina,NC,0.5965,0.2815,0.21,2,Yes,22300,30,51285,15.02,22.47,58880,2119438,11.87,15.02,0,In-Home Aide Level II (All home care agencies): 0
+North Dakota,ND,0.3392,0.1595,0.73,2,Yes,300,40,53059,18.96,20.61,7730,143139,17.41,18.96,0,Qualified Service Provider and Family Personal Care Qualified Service Provider (Agencies that receive Medicaid reimbursement; at least one consumer-directed programs): 0
+Ohio,OH,0.715,0.3362,0.96,2,Yes,2051,33,49869,16.57,21.0,106940,2398129,13.64,16.57,0,ODA-Certified Personal Care Aide (All home care agencies that serve people ages 60 and older): 30; Personal Care Aide (Home care agencies that receive funding through the Ohio Home Care Waiver): 0
+Oklahoma,OK,0.5603,0.2974,0.61,1,No,2332,35,49495,13.32,20.73,20310,741085,11.03,13.32,0,Supportive Home Assistant (All home care agencies): 0; Advanced Supportive/ Restorative Assistance Aides (Agencies that receive Medicaid reimbursement): 0
+Oregon,OR,0.9322,0.7041,0.91,1,No,3119,40,58852,21.35,26.46,42330,898568,18.1,21.35,14,Home Care Worker/Personal Support Worker/Personal Care Attendant (All home care agencies; consumer-directed programs): 14
+Pennsylvania,PA,0.6361,0.5158,0.86,2,Yes,11440,34,52474,14.14,23.32,257370,2799790,12.75,14.14,0,Direct Care Worker (Agencies that receive Medicaid reimbursement): 0
+Rhode Island,RI,0.5052,0.3528,0.86,0,N/A,0,42,57865,21.0,25.01,7490,233061,15.32,21.0,120,Nursing Assistant (All home care agencies): 120
+South Carolina,SC,0.6291,0.3785,0.37,1,No,37139,30,52841,14.48,22.34,40750,1173259,11.35,14.48,0,Personal Care Aide II (Agencies that receive Medicaid reimbursement): 0
+South Dakota,SD,0.4204,0.2239999999999999,0.78,2,Yes,372,44,53981,18.15,20.53,4210,181082,15.62,18.15,0,Personal Care Aide (All home care agencies that receive Medicaid reimbursement): 0
+Tennessee,TN,0.3851,0.2568,0.74,2,Yes,1535,31,50271,15.45,21.61,35950,1360588,13.5,15.45,0,No training requirements in any Medicaid program
+Texas,TX,0.7353000000000001,0.4891,0.78,1,No,194316,30,55533,11.65,21.77,329590,4711381,10.57,11.65,0,No training requirements in any Medicaid program
+Utah,UT,0.4872999999999999,0.3278999999999999,0.31,2,Yes,13316,38,67374,17.25,24.71,17130,460179,14.78,17.25,0,Personal Care Aide (All home care agencies): 0
+Vermont,VT,0.664,0.3119,0.69,0,N/A,0,44,55201,20.0,24.92,7700,155289,15.05,20.0,0,No training requirements in any Medicaid program
+Virginia,VA,0.5924,0.4318,0.82,2,Yes,14422,33,64938,14.57,25.72,70070,1633891,12.97,14.57,40,Home Attendant/Personal Care Aide (All home care agencies): 40
+Washington,WA,0.8572,0.7354,0.95,2,Yes,294,42,63963,22.95,26.59,103260,1460563,19.29,22.95,75,Home Care Aide/Individual Provider (All home care agencies; at least one consumer-directed program): 75
+West Virginia,WV,0.4792,0.1088,0.77,2,Yes,1305,29,44465,13.47,19.53,18890,398189,10.78,13.47,0,Direct Care Worker (Agencies that receive Medicaid reimbursement and consumer-directed programs except those under the Aged and Disabled Waiver): 0; Personal Attendant (Agencies that receive Medicaid reimbursement; consumer-directed programs under the Aged and Disabled Waiver Personal Options Program): 0
+Wisconsin,WI,0.9606,0.9123,0.97,2,Yes,9160,38,52916,17.47,21.88,82430,1241547,13.47,17.47,0,"Personal Care Worker (Agencies that receive Medicaid reimbursement): 0; Personal Assistant (Agencies that receive Medicaid reimbursement; consumer-directed programs for Family Care, Family Care Partnership, and PACE programs): 0"
+Wyoming,WY,0.5602,0.3121,0.2,2,Yes,534,32,53962,15.96,21.45,3410,121648,13.32,15.96,91,Home Health Aide (Agencies that receive Medicaid reimbursement; at least one consumer-directed program): 91
