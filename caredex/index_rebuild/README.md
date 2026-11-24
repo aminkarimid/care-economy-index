@@ -19,7 +19,7 @@ The GPI and MFI on CareDex are computed here, not by `SYPA_Complete_Pipeline.py`
 
 The training gap is (120 − hours) / 120, floored at 0; 120 hours is the Institute of Medicine's recommended minimum for home health aides and nursing assistants. Since all formulas standardize each signal across states, the benchmark only matters for the two states at or above it (DC 125, RI 120).
 
-One output also changed: `MFI_bottleneck` in the thesis output came from the legacy MFI v4 function, which runs after MFI v5 and overwrites the label using PHI State Index ranks as proxies. Here it is the largest of the five headline MFI v5 components, as the code comment intends.
+Two thesis outputs came from the legacy MFI v4 function, which runs after MFI v5 and overwrites them: `MFI_bottleneck` (computed from PHI State Index ranks as proxies) and `MFI_rank` (the rank of MFI v4, not MFI v5). Here the bottleneck is the largest of the five headline MFI v5 components, as the code comment intends, and the results file gives MFI v5 rank ranges across the sensitivity variants instead of a single `MFI_rank`.
 
 ## Results
 
